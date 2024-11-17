@@ -99,7 +99,7 @@ export default function Show({ auth, success, project, tasks, queryParams }) {
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <TasksTable
                 tasks={tasks}
-                // success={success}
+                success={success}
                 queryParams={queryParams}
                 hideProjectCols={true}
               />

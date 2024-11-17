@@ -5,7 +5,12 @@ import TextInput from "@/Components/TextInput";
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constant";
 import { Link, router } from "@inertiajs/react";
 
-const TasksTable = ({ tasks, queryParams = null, hideProjectCols = false }) => {
+const TasksTable = ({
+  tasks,
+  queryParams = null,
+  hideProjectCols = false,
+  success,
+}) => {
   queryParams = queryParams || {};
 
   const searchFieldChanged = (name, value) => {
@@ -40,9 +45,21 @@ const TasksTable = ({ tasks, queryParams = null, hideProjectCols = false }) => {
     router.get(route("task.index", queryParams));
   };
 
+  const deleteTask = (task) => {
+    if (!confirm("Are you sure you want to delete this Task?")) {
+      return;
+    }
+    router.delete(route("task.destroy", task.id));
+  };
+
   console.log(tasks);
   return (
     <>
+      {success && (
+        <div className="bg-emerald-500 py-2 px-4 text-white rounded mb-5">
+          {success}
+        </div>
+      )}
       <div className="mb-5 flex gap-2">
         <TextInput
           placeholder="Task Name"
@@ -143,8 +160,8 @@ const TasksTable = ({ tasks, queryParams = null, hideProjectCols = false }) => {
                 {/* <td className="px-6 py-4  text-sm text-gray-500 dark:text-gray-300  ">
                   {task.project.name}
                 </td> */}
-                <td className="px-6 py-4  text-sm text-gray-500 dark:text-gray-300  ">
-                  {task.name}
+                <td className="px-6 py-4  text-sm text-gray-500 dark:text-gray-300 hover:underline font-bold ">
+                  <Link href={route("task.show", task.id)}>{task.name}</Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                   <span
@@ -172,12 +189,13 @@ const TasksTable = ({ tasks, queryParams = null, hideProjectCols = false }) => {
                   >
                     Edit
                   </Link>
-                  <Link
-                    href={route("task.destroy", task.id)}
+                  <button
+                    // href={route("project.destroy", project.id)}
+                    onClick={(e) => deleteTask(task)}
                     className="ml-4 text-red-600 hover:text-red-900"
                   >
                     Delete
-                  </Link>
+                  </button>
                 </td>
               </tr>
             ))}
