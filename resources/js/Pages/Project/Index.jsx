@@ -145,8 +145,10 @@ const Index = ({ auth, projects, queryParams = null }) => {
                             className="w-10 h-10 rounded-full"
                           />
                         </td>
-                        <td className="px-6 py-4  text-sm text-gray-500 dark:text-gray-300  ">
-                          {project.name}
+                        <td className="px-6 py-4  text-sm text-gray-500 dark:text-gray-300 hover:underline font-bold">
+                          <Link href={route("project.show", project.id)}>
+                            {project.name}
+                          </Link>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                           <span
