@@ -10,11 +10,15 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::redirect("/", "/dashboard");
+// Route::redirect("/", "/dashboard");
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/', function () {
+    return Inertia::render('Welcome'); // Ensure you have a Welcome component in your resources/js/Pages directory
+})->name('welcome');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get("/dashboard", [DashboardController::class, "index"])->name("dashboard");
