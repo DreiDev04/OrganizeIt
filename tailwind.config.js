@@ -50,6 +50,22 @@ export default {
                     DEFAULT: "var(--blues)",
                     foreground: "var(--blues-foreground)",
                 },
+                amber: {
+                    DEFAULT: "var(--amber)",
+                    foreground: "var(--amber-foreground)",
+                },
+                green: {
+                    DEFAULT: "var(--green)",
+                    foreground: "var(--green-foreground)",
+                },
+                card: {
+                    DEFAULT: "var(--card)",
+                    foreground: "var(--card-foreground)",
+                },
+                card_light: {
+                    DEFAULT: "var(--card_light)",
+                    foreground: "var(--card_light-foreground)",
+                },
                 gray: {
                     0: "#000000",
                     1: "#171717",

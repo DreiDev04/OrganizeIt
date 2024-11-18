@@ -23,6 +23,9 @@
         --blues: #007bff;
         --blues-foreground: #ffffff;
 
+        --amber: "#111827";
+        --amber-foreground: #ffffff;
+
         /* Tints */
         --tint-1: hsla(0, 0%, 100%, 0.035);
         --tint-2: hsla(0, 0%, 100%, 0.1);
@@ -41,7 +44,7 @@
     .dark {
         --background: #17171b;
         --foreground: #fdeef1;
-        --border: #fdeef1;
+        --border: #3f3f49;
 
         --primary: #4089d6;
         --primary-foreground: #000000;
@@ -57,6 +60,18 @@
 
         --blues: #007bff;
         --blues-foregorund: #000000;
+
+        --amber: #f59e0b;
+        --amber-foreground: #000000;
+
+        --green: #22c55e;
+        --green-foreground: #000000;
+
+        --card: #1e1e24;
+        --card-foreground: #fdeef1;
+
+        --card_light: #12121a;
+        --card_light-foreground: #fdeef1;
     }
 }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { Head, Link } from "@inertiajs/react";
+import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function Welcome({ auth }) {
   const { user } = auth;
@@ -10,7 +11,9 @@ export default function Welcome({ auth }) {
       <div className="min-h-screen bg-background text-foreground flex flex-col">
         <header className="bg-background shadow-md p-6">
           <div className="container mx-auto flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-primary">OrganizeIt</h1>
+            <Link href="/dashboard">
+              <ApplicationLogo />
+            </Link>
             <nav>
               {user ? (
                 <Link
@@ -48,18 +51,21 @@ export default function Welcome({ auth }) {
             collaborate with your team, and achieve your goals efficiently.
           </p>
           <div className="space-x-4">
-            <a
-              href="/register"
-              className="bg-foreground text-primary font-bold py-2 px-6 rounded shadow hover:bg-muted transition"
-            >
-              Get Started
-            </a>
-            <a
+            {!user && (
+              <Link
+                href="/register"
+                className="bg-foreground text-primary font-bold py-2 px-6 rounded shadow hover:bg-muted transition"
+              >
+                Get Started
+              </Link>
+            )}
+
+            <Link
               href="#features"
               className="bg-primary font-bold py-2 px-6 rounded shadow hover:bg-blues transition"
             >
               Learn More
-            </a>
+            </Link>
           </div>
         </main>
 
@@ -129,12 +135,12 @@ export default function Welcome({ auth }) {
               Join thousands of teams who are using OrganizeIt to manage their
               projects and tasks more effectively.
             </p>
-            <a
+            <Link
               href="/register"
               className="bg-primary text-foreground font-bold py-2 px-6 rounded shadow hover:bg-blues transition"
             >
               Sign Up Now
-            </a>
+            </Link>
           </div>
         </section>
 
