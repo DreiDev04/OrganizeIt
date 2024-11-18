@@ -1,3 +1,4 @@
+import Button from "@/Components/Button";
 import Pagination from "@/Components/Pagination";
 import SelectInput from "@/Components/SelectInput";
 import TableHeading from "@/Components/TableHeading";
@@ -55,33 +56,52 @@ const TasksTable = ({
   console.log(tasks);
   return (
     <>
-      {success && (
-        <div className="bg-emerald-500 py-2 px-4 text-white rounded mb-5">
-          {success}
+      {success && <Toast message={success} type="success" duration={5000} />}
+
+      <div className="mb-5 flex w-full justify-between">
+        <div className="flex gap-2">
+          <TextInput
+            placeholder="Task Name"
+            onBlur={(e) => searchFieldChanged("name", e.target.value)}
+            onKeyDown={(e) => onKeyDown("name", e)}
+            defaultValue={queryParams.name}
+          />
+          <SelectInput
+            onChange={(e) => {
+              searchFieldChanged("status", e.target.value);
+            }}
+            defaultValue={queryParams.status}
+          >
+            <option value="">Select Status</option>
+            <option value="pending">Pending</option>
+            <option value="in_progress">In Progress</option>
+            <option value="completed">Completed</option>
+          </SelectInput>
         </div>
-      )}
-      <div className="mb-5 flex gap-2">
-        <TextInput
-          placeholder="Task Name"
-          onBlur={(e) => searchFieldChanged("name", e.target.value)}
-          onKeyDown={(e) => onKeyDown("name", e)}
-          defaultValue={queryParams.name}
-        />
-        <SelectInput
-          onChange={(e) => {
-            searchFieldChanged("status", e.target.value);
-          }}
-          defaultValue={queryParams.status}
-        >
-          <option value="">Select Status</option>
-          <option value="pending">Pending</option>
-          <option value="in_progress">In Progress</option>
-          <option value="completed">Completed</option>
-        </SelectInput>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => {
+              //TODO: Implement
+              // router.get(route("project.show", project.id));
+            }}
+          >
+            View
+          </Button>
+          <Button
+            variant="default"
+            onClick={() => {
+              //TODO: Implement
+              // router.get(route("task.create"));
+            }}
+          >
+            Add Task
+          </Button>
+        </div>
       </div>
-      <div className="overflow-auto">
+      <div className="">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-700">
+          <thead className="bg-card_dark">
             <tr>
               <TableHeading
                 name="id"

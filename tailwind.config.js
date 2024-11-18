@@ -62,8 +62,16 @@ export default {
                     DEFAULT: "var(--card)",
                     foreground: "var(--card-foreground)",
                 },
+                card_dark: {
+                    DEFAULT: "var(--card_dark)",
+                    foreground: "var(--card_dark-foreground)",
+                },
                 card_light: {
                     DEFAULT: "var(--card_light)",
+                    foreground: "var(--card_light-foreground)",
+                },
+                danger: {
+                    DEFAULT: "var(--danger)",
                     foreground: "var(--card_light-foreground)",
                 },
                 gray: {
