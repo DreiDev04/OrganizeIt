@@ -12,14 +12,14 @@ export default function AuthenticatedLayout({ header, children }) {
     useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-      <nav className="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
+    <div className="min-h-screen bg-background">
+      <nav className="border-b bg-backgroun text-foreground border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 justify-between">
             <div className="flex">
               <div className="flex shrink-0 items-center">
                 <Link href="/">
-                  <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                  <ApplicationLogo/>
                 </Link>
               </div>
 
@@ -42,12 +42,12 @@ export default function AuthenticatedLayout({ header, children }) {
                 >
                   Tasks
                 </NavLink>
-                <NavLink
+                {/* <NavLink
                   href={route("user.index")}
                   active={route().current("user.index")}
                 >
                   Users
-                </NavLink>
+                </NavLink> */}
                 <NavLink
                   href={route("task.myTasks")}
                   active={route().current("task.myTasks")}
@@ -180,7 +180,7 @@ export default function AuthenticatedLayout({ header, children }) {
       </nav>
 
       {header && (
-        <header className="bg-white shadow dark:bg-gray-800">
+        <header className="bg-card">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             {header}
           </div>

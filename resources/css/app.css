@@ -1,3 +1,86 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        --background: #e8e8e8;
+        --foreground: #150d04;
+        --border: #e8e8e8;
+
+        --primary: #5f0819;
+        --primary-foreground: #ffffff;
+
+        --secondary: #1b5122;
+        --secondary-foreground: #ffffff;
+
+        --accent: #1b5122;
+        --accent-foreground: #ffffff;
+
+        --muted: #2e1c08;
+        --muted-foreground: #ffffff;
+
+        --blues: #007bff;
+        --blues-foreground: #ffffff;
+
+        --amber: "#111827";
+        --amber-foreground: #ffffff;
+
+        /* Tints */
+        --tint-1: hsla(0, 0%, 100%, 0.035);
+        --tint-2: hsla(0, 0%, 100%, 0.1);
+        --tint-3: hsla(0, 0%, 100%, 0.19);
+        --tint-4: hsla(0, 0%, 100%, 0.28);
+        --tint-5: hsla(0, 0%, 100%, 0.36);
+        --tint-6: hsla(0, 0%, 100%, 0.45);
+        --tint-7: hsla(0, 0%, 100%, 0.55);
+        --tint-8: hsla(0, 0%, 100%, 0.64);
+        --tint-9: hsla(0, 0%, 100%, 0.73);
+        --tint-10: hsla(0, 0%, 100%, 0.815);
+        --tint-11: hsla(0, 0%, 100%, 0.895);
+        --tint-12: hsla(0, 0%, 100%, 0.94);
+    }
+
+    .dark {
+        --background: #17171b;
+        --foreground: #fdeef1;
+        --border: #3f3f49;
+
+        --primary: #4089d6;
+        --primary-foreground: #000000;
+
+        --secondary: #ffc081;
+        --secondary-foreground: #000000;
+
+        --accent: #ffc081;
+        --accent-foreground: #000000;
+
+        --muted: #ffdab7;
+        --muted-foreground: #000000;
+
+        --blues: #007bff;
+        --blues-foregorund: #000000;
+
+        --amber: #f59e0b;
+        --amber-foreground: #000000;
+
+        --green: #22c55e;
+        --green-foreground: #000000;
+
+        --card: #1e1e24;
+        --card-foreground: #fdeef1;
+
+        --card_light: #12121a;
+        --card_light-foreground: #fdeef1;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
+}

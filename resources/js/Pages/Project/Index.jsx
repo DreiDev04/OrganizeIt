@@ -55,12 +55,12 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
       user={auth.user}
       header={
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+          <h2 className="text-xl font-semibold leading-tight text-foreground">
             Projects
           </h2>
           <Link
             href={route("project.create")}
-            className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+            className="bg-green py-1 px-3 text-foreground rounded shadow transition-all hover:bg-emerald-600"
           >
             Add New
           </Link>
