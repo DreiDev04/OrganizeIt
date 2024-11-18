@@ -70,8 +70,14 @@
         --card: #1e1e24;
         --card-foreground: #fdeef1;
 
-        --card_light: #12121a;
+        --card_light: rgb(53, 53, 61);
         --card_light-foreground: #fdeef1;
+
+        --card_dark: #12121a;
+        --card_dark-foreground: #fdeef1;
+
+        --danger: #dc3545;
+        --danger-foreground: #ffffff;
     }
 }
 

@@ -37,10 +37,10 @@ export default function Create({ auth, project }) {
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+          <div className=" overflow-hidden shadow-sm sm:rounded-lg bg-card">
             <form
               onSubmit={onSubmit}
-              className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
+              className="p-4 sm:p-8 shadow sm:rounded-lg"
             >
               {project.image_path && (
                 <div className="mb-4">
@@ -126,14 +126,14 @@ export default function Create({ auth, project }) {
 
                 <InputError message={errors.project_status} className="mt-2" />
               </div>
-              <div className="mt-4 text-right">
+              <div className="mt-4 text-right ">
                 <Link
-                  href={route("project.index")}
-                  className="bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2"
+                  href={route("project.show", project.id)}
+                  className=" py-1 px-3 rounded shadow transition-all bg-danger mr-4"
                 >
                   Cancel
                 </Link>
-                <button className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
+                <button className="bg-green py-1 px-3 rounded shadow transition-all">
                   Submit
                 </button>
               </div>

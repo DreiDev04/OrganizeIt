@@ -1,14 +1,15 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
-import {
-  PROJECT_STATUS_CLASS_MAP,
-  PROJECT_STATUS_TEXT_MAP,
-} from "@/constant";
+import { Head, Link, router } from "@inertiajs/react";
+import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constant";
 import TasksTable from "../Task/TasksTable";
 
-
 export default function Show({ auth, success, project, tasks, queryParams }) {
-
+  const deleteProject = (project) => {
+    if (!confirm("Are you sure you want to delete this project?")) {
+      return;
+    }
+    router.delete(route("project.destroy", project.id));
+  };
 
   return (
     <AuthenticatedLayout
@@ -18,19 +19,27 @@ export default function Show({ auth, success, project, tasks, queryParams }) {
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {`Project "${project.name}"`}
           </h2>
-          <Link
-            href={route("project.edit", project.id)}
-            className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
-          >
-            Edit
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              href={route("project.edit", project.id)}
+              className="bg-green py-1 px-3 text-white rounded shadow transition-all hover:bg-green-700"
+            >
+              Edit
+            </Link>
+            <button
+              onClick={(e) => deleteProject(project)}
+              className="bg-danger py-1 px-3 text-foreground rounded shadow transition-all hover:bg-red-700"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       }
     >
       <Head title={`Project "${project.name}"`} />
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+          <div className="bg-card overflow-hidden shadow-sm sm:rounded-lg">
             <div>
               <img
                 src={project.image_path}
@@ -96,7 +105,7 @@ export default function Show({ auth, success, project, tasks, queryParams }) {
       <div className="pb-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div className="p-6 text-gray-900 dark:text-gray-100">
+            <div className="p-6 bg-card">
               <TasksTable
                 tasks={tasks}
                 success={success}
