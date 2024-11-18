@@ -10,12 +10,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-// Route::redirect("/", "/dashboard");
-
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::get('/', function () {
     return Inertia::render('Welcome'); // Ensure you have a Welcome component in your resources/js/Pages directory
 })->name('welcome');
@@ -25,6 +19,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource("project", ProjectController::class);
     Route::get("/task/my-tasks", [TaskController::class, "myTasks"])->name("task.myTasks");
     Route::resource("task", TaskController::class);
+    
+    Route::get('task/create/{project}', [TaskController::class, 'create'])->name('task.create');
+    Route::get('project/{project}/task/{task}/edit', [TaskController::class, 'edit'])->name('task.edit');
+
+
+
     Route::resource("user", UserController::class);
 });
 

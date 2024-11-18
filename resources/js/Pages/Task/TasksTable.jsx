@@ -11,6 +11,7 @@ const TasksTable = ({
   queryParams = null,
   hideProjectCols = false,
   success,
+  project,
 }) => {
   queryParams = queryParams || {};
 
@@ -42,7 +43,7 @@ const TasksTable = ({
       queryParams.sort_direction = "asc";
     }
 
-    console.log(queryParams);
+    // console.log(queryParams);
     router.get(route("task.index", queryParams));
   };
 
@@ -50,14 +51,18 @@ const TasksTable = ({
     if (!confirm("Are you sure you want to delete this Task?")) {
       return;
     }
-    router.delete(route("task.destroy", task.id));
+    router.delete(
+      route("task.destroy", { task: task.id, project_id: project.id })
+    );
   };
 
-  console.log(tasks);
+  const editTask = (task) => {
+    router.get(route("task.edit", { project: project.id, task: task.id }));
+  };
+
+  // console.log(tasks);
   return (
     <>
-      {success && <Toast message={success} type="success" duration={5000} />}
-
       <div className="mb-5 flex w-full justify-between">
         <div className="flex gap-2">
           <TextInput
@@ -92,7 +97,7 @@ const TasksTable = ({
             variant="default"
             onClick={() => {
               //TODO: Implement
-              // router.get(route("task.create"));
+              router.get(route("task.create", project.id));
             }}
           >
             Add Task
@@ -100,6 +105,7 @@ const TasksTable = ({
         </div>
       </div>
       <div className="">
+        {}
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-card_dark">
             <tr>
@@ -203,8 +209,17 @@ const TasksTable = ({
                   {task.createdBy.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                  {/* <button
+                    onClick={(e) => editTask(task)}
+                    className="text-indigo-600 hover:text-indigo-900"
+                  >
+                    Edit
+                  </button> */}
                   <Link
-                    href={route("task.edit", task.id)}
+                    href={route("task.edit", {
+                      project: project.id,
+                      task: task.id,
+                    })}
                     className="text-indigo-600 hover:text-indigo-900"
                   >
                     Edit

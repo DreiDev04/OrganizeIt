@@ -6,8 +6,10 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
-export default function Create({ auth, projects, users }) {
+export default function Create({ auth, users, project }) {
+
   const { data, setData, post, errors, reset } = useForm({
+    project_id: project.id,
     image: "",
     name: "",
     status: "",
@@ -18,16 +20,18 @@ export default function Create({ auth, projects, users }) {
   const onSubmit = (e) => {
     e.preventDefault();
 
+    // console.log(data);
     post(route("task.store"));
   };
 
+  // console.log(project);
   return (
     <AuthenticatedLayout
       user={auth.user}
       header={
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Create new Task
+            Create new Task on {project.name}
           </h2>
         </div>
       }
@@ -43,19 +47,14 @@ export default function Create({ auth, projects, users }) {
             >
               <div>
                 <InputLabel htmlFor="task_project_id" value="Project" />
-
                 <SelectInput
                   name="project_id"
                   id="task_project_id"
                   className="mt-1 block w-full"
-                  onChange={(e) => setData("project_id", e.target.value)}
+                  
+                  value={project.id}
                 >
-                  <option value="">Select Project</option>
-                  {projects.data.map((project) => (
-                    <option value={project.id} key={project.id}>
-                      {project.name}
-                    </option>
-                  ))}
+                  <option value={project.id}>{project.name}</option>
                 </SelectInput>
 
                 <InputError message={errors.project_id} className="mt-2" />
@@ -125,13 +124,14 @@ export default function Create({ auth, projects, users }) {
                   className="mt-1 block w-full"
                   onChange={(e) => setData("status", e.target.value)}
                 >
-                  <option value="">Select Status</option>
+
+                  <option value="" >Select Status</option>
                   <option value="pending">Pending</option>
                   <option value="in_progress">In Progress</option>
                   <option value="completed">Completed</option>
                 </SelectInput>
 
-                <InputError message={errors.task_status} className="mt-2" />
+                <InputError message={errors.status} className="mt-2" />
               </div>
 
               <div className="mt-4">
@@ -143,7 +143,7 @@ export default function Create({ auth, projects, users }) {
                   className="mt-1 block w-full"
                   onChange={(e) => setData("priority", e.target.value)}
                 >
-                  <option value="">Select Priority</option>
+                  <option value="" >Select Priority</option>
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
                   <option value="high">High</option>
@@ -164,7 +164,7 @@ export default function Create({ auth, projects, users }) {
                   className="mt-1 block w-full"
                   onChange={(e) => setData("assigned_user_id", e.target.value)}
                 >
-                  <option value="">Select User</option>
+                  <option value="" >Select User</option>
                   {users.data.map((user) => (
                     <option value={user.id} key={user.id}>
                       {user.name}
@@ -180,7 +180,7 @@ export default function Create({ auth, projects, users }) {
 
               <div className="mt-4 text-right">
                 <Link
-                  href={route("task.index")}
+                  href={route("project.show", project.id)}
                   className="bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2"
                 >
                   Cancel

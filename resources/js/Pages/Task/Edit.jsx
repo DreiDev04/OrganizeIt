@@ -6,7 +6,7 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
-export default function Create({ auth, task, projects, users }) {
+export default function Create({ auth, task, project, users }) {
   const { data, setData, post, errors, reset } = useForm({
     image: "",
     name: task.name || "",
@@ -24,6 +24,9 @@ export default function Create({ auth, task, projects, users }) {
 
     post(route("task.update", task.id));
   };
+
+  // console.log(data);
+
 
   return (
     <AuthenticatedLayout
@@ -56,16 +59,12 @@ export default function Create({ auth, task, projects, users }) {
                 <SelectInput
                   name="project_id"
                   id="task_project_id"
-                  value={data.project_id}
+                  value={project.id}
                   className="mt-1 block w-full"
-                  onChange={(e) => setData("project_id", e.target.value)}
+                  disabled
                 >
-                  <option value="">Select Project</option>
-                  {projects.data.map((project) => (
-                    <option value={project.id} key={project.id}>
-                      {project.name}
-                    </option>
-                  ))}
+                  <option value={project.id}>{project.name}</option>
+
                 </SelectInput>
 
                 <InputError message={errors.project_id} className="mt-2" />
@@ -192,13 +191,13 @@ export default function Create({ auth, task, projects, users }) {
               </div>
 
               <div className="mt-4 text-right">
-                <Link
-                  href={route("task.index")}
-                  className="bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2"
+              <Link
+                  href={route("project.show", project.id)}
+                  className=" py-1 px-3 rounded shadow transition-all bg-danger mr-4"
                 >
                   Cancel
                 </Link>
-                <button className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
+                <button className="bg-green py-1 px-3 rounded shadow transition-all">
                   Submit
                 </button>
               </div>

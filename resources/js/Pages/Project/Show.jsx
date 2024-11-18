@@ -2,8 +2,16 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constant";
 import TasksTable from "../Task/TasksTable";
+import { useToast } from "@/Components/Toast";
+import { useEffect } from "react";
 
 export default function Show({ auth, success, project, tasks, queryParams }) {
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    if (success) showToast(success, "success");
+  }, [success]);
+
   const deleteProject = (project) => {
     if (!confirm("Are you sure you want to delete this project?")) {
       return;
@@ -37,6 +45,8 @@ export default function Show({ auth, success, project, tasks, queryParams }) {
       }
     >
       <Head title={`Project "${project.name}"`} />
+
+      {/* {success && <Toast message={success} type="success" duration={5000} />} */}
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-card overflow-hidden shadow-sm sm:rounded-lg">
@@ -111,6 +121,7 @@ export default function Show({ auth, success, project, tasks, queryParams }) {
                 success={success}
                 queryParams={queryParams}
                 hideProjectCols={true}
+                project={project}
               />
             </div>
           </div>

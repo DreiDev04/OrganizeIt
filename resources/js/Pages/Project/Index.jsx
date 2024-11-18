@@ -2,7 +2,6 @@ import Pagination from "@/Components/Pagination";
 import SelectInput from "@/Components/SelectInput";
 import TableHeading from "@/Components/TableHeading";
 import TextInput from "@/Components/TextInput";
-import Toast from "@/Components/Toast";
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constant";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
@@ -70,9 +69,6 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
       <Head title="Projects" />
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          {success && (
-            <Toast message={success} type="success" duration={5000} />
-          )}
           <div className="overflow-hidden bg-card shadow-sm sm:rounded-lg ">
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <div className="mb-5 flex gap-2">
