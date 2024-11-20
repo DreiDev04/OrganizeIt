@@ -28,3 +28,4 @@ export const TASK_PRIORITY_TEXT_MAP = {
   medium: "Medium",
   high: "High",
 };
+

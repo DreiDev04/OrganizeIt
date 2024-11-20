@@ -3,7 +3,12 @@ import Pagination from "@/Components/Pagination";
 import SelectInput from "@/Components/SelectInput";
 import TableHeading from "@/Components/TableHeading";
 import TextInput from "@/Components/TextInput";
-import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constant";
+import {
+  TASK_PRIORITY_CLASS_MAP,
+  TASK_PRIORITY_TEXT_MAP,
+  TASK_STATUS_CLASS_MAP,
+  TASK_STATUS_TEXT_MAP,
+} from "@/constant";
 import { Link, router } from "@inertiajs/react";
 
 const TasksTable = ({
@@ -25,12 +30,16 @@ const TasksTable = ({
     }
     // router.get(route("project.show", updatedParams));
     const scrollPosition = window.scrollY;
-    router.get(route("project.show", { ...updatedParams, project: project.id }), {}, {
-      preserveState: true,
-      onSuccess: () => {
-        window.scrollTo(0, scrollPosition);
-      },
-    });
+    router.get(
+      route("project.show", { ...updatedParams, project: project.id }),
+      {},
+      {
+        preserveState: true,
+        onSuccess: () => {
+          window.scrollTo(0, scrollPosition);
+        },
+      }
+    );
   };
 
   const onKeyDown = (e) => {
@@ -50,13 +59,16 @@ const TasksTable = ({
       queryParams.sort_direction = "asc";
     }
     const scrollPosition = window.scrollY;
-    router.get(route("project.show", { ...queryParams, project: project.id }), {}, {
-      preserveState: true,
-      onSuccess: () => {
-        window.scrollTo(0, scrollPosition);
-      },
-    });
-    
+    router.get(
+      route("project.show", { ...queryParams, project: project.id }),
+      {},
+      {
+        preserveState: true,
+        onSuccess: () => {
+          window.scrollTo(0, scrollPosition);
+        },
+      }
+    );
   };
 
   const deleteTask = (task) => {
@@ -66,10 +78,6 @@ const TasksTable = ({
     router.delete(
       route("task.destroy", { task: task.id, project_id: project.id })
     );
-  };
-
-  const editTask = (task) => {
-    router.get(route("task.edit", { project: project.id, task: task.id }));
   };
 
   console.log(tasks);
@@ -96,19 +104,9 @@ const TasksTable = ({
           </SelectInput>
         </div>
         <div className="flex gap-2">
-          {/* <Button
-            variant="outline"
-            onClick={() => {
-              //TODO: Implement
-              // router.get(route("project.show", project.id));
-            }}
-          >
-            View
-          </Button> */}
           <Button
             variant="default"
             onClick={() => {
-              //TODO: Implement
               router.get(route("task.create", project.id));
             }}
           >
@@ -117,7 +115,7 @@ const TasksTable = ({
         </div>
       </div>
       <div className="">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <table className="min-w-full divide-y">
           <thead className="bg-card_dark">
             <tr>
               {/* <TableHeading
@@ -152,14 +150,14 @@ const TasksTable = ({
               >
                 Status
               </TableHeading>
-              <TableHeading
+              {/* <TableHeading
                 name="created_at"
                 sort_field={queryParams.sort_field}
                 sort_direction={queryParams.sort_direction}
                 sortChanged={sortChanged}
               >
                 Create Date
-              </TableHeading>
+              </TableHeading> */}
               <TableHeading
                 name="due_date"
                 sort_field={queryParams.sort_field}
@@ -174,12 +172,20 @@ const TasksTable = ({
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                 Assigned To
               </th>
+              <TableHeading
+                name="priority"
+                sort_field={queryParams.sort_field}
+                sort_direction={queryParams.sort_direction}
+                sortChanged={sortChanged}
+              >
+                Priority
+              </TableHeading>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+          <tbody className=" divide-y divide-gray-3 bg-background">
             {tasks.data.map((task) => (
               <tr key={task.id}>
                 {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -193,17 +199,24 @@ const TasksTable = ({
                   />
                 </td>
                 {!hideProjectCols && (
-                  <td className="px-6 py-4  text-sm text-gray-500 dark:text-gray-300  ">
+                  <td className="px-6 py-4  text-sm text-foreground ">
                     {task.project.name}
                   </td>
                 )}
-                {/* <td className="px-6 py-4  text-sm text-gray-500 dark:text-gray-300  ">
+                {/* <td className="px-6 py-4  text-sm text-foreground ">
                   {task.project.name}
                 </td> */}
-                <td className="px-6 py-4  text-sm text-gray-500 dark:text-gray-300 hover:underline font-bold ">
-                  <Link href={route("task.show", task.id)}>{task.name}</Link>
+                <td className="px-6 py-4  text-sm text-foregroundhover:underline font-bold ">
+                  <Link
+                    href={route("task.show", {
+                      project: project.id, // The project ID
+                      task: task.id, // The task ID
+                    })}
+                  >
+                    {task.name}
+                  </Link>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                   <span
                     className={
                       TASK_STATUS_CLASS_MAP[task.status] +
@@ -213,26 +226,38 @@ const TasksTable = ({
                     {TASK_STATUS_TEXT_MAP[task.status]}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 ">
+                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                   {task.created_at}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 ">
+                </td> */}
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                   {task.due_date}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                   {task.createdBy.name}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                   {task.assignedUser.name}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                  {/* <button
-                    onClick={(e) => editTask(task)}
-                    className="text-indigo-600 hover:text-indigo-900"
+                <td
+                  className={
+                    "px-6 py-4 whitespace-nowrap text-sm text-foreground " +
+                    TASK_PRIORITY_CLASS_MAP[task.priority]
+                  }
+                >
+                  {TASK_PRIORITY_TEXT_MAP[task.priority]}
+                </td>
+                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground justify-center align-middle">
+                  <span
+                    className={
+                      TASK_PRIORITY_CLASS_MAP[task.priority] +
+                      " inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium "
+                    }
                   >
-                    Edit
-                  </button> */}
-                  <Link
+                    {TASK_PRIORITY_TEXT_MAP[task.priority]}
+                  </span>
+                </td> */}
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                  {/* <Link
                     href={route("task.edit", {
                       project: project.id,
                       task: task.id,
@@ -240,9 +265,17 @@ const TasksTable = ({
                     className="text-indigo-600 hover:text-indigo-900"
                   >
                     Edit
+                  </Link> */}
+                  <Link
+                    href={route("task.edit", {
+                      project: project.id, // The project ID
+                      task: task.id, // The task ID
+                    })}
+                    className="text-indigo-600 hover:text-indigo-900"
+                  >
+                    Edit
                   </Link>
                   <button
-                    // href={route("project.destroy", project.id)}
                     onClick={(e) => deleteTask(task)}
                     className="ml-4 text-red-600 hover:text-red-900"
                   >
