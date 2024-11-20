@@ -23,7 +23,14 @@ const TasksTable = ({
     } else {
       delete updatedParams[name];
     }
-    router.get(route("task.index", updatedParams));
+    // router.get(route("project.show", updatedParams));
+    const scrollPosition = window.scrollY;
+    router.get(route("project.show", { ...updatedParams, project: project.id }), {}, {
+      preserveState: true,
+      onSuccess: () => {
+        window.scrollTo(0, scrollPosition);
+      },
+    });
   };
 
   const onKeyDown = (e) => {
@@ -42,9 +49,14 @@ const TasksTable = ({
       queryParams.sort_field = name;
       queryParams.sort_direction = "asc";
     }
-
-    // console.log(queryParams);
-    router.get(route("task.index", queryParams));
+    const scrollPosition = window.scrollY;
+    router.get(route("project.show", { ...queryParams, project: project.id }), {}, {
+      preserveState: true,
+      onSuccess: () => {
+        window.scrollTo(0, scrollPosition);
+      },
+    });
+    
   };
 
   const deleteTask = (task) => {
@@ -60,7 +72,7 @@ const TasksTable = ({
     router.get(route("task.edit", { project: project.id, task: task.id }));
   };
 
-  // console.log(tasks);
+  console.log(tasks);
   return (
     <>
       <div className="mb-5 flex w-full justify-between">
@@ -84,7 +96,7 @@ const TasksTable = ({
           </SelectInput>
         </div>
         <div className="flex gap-2">
-          <Button
+          {/* <Button
             variant="outline"
             onClick={() => {
               //TODO: Implement
@@ -92,7 +104,7 @@ const TasksTable = ({
             }}
           >
             View
-          </Button>
+          </Button> */}
           <Button
             variant="default"
             onClick={() => {
@@ -105,18 +117,17 @@ const TasksTable = ({
         </div>
       </div>
       <div className="">
-        {}
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-card_dark">
             <tr>
-              <TableHeading
+              {/* <TableHeading
                 name="id"
                 sort_field={queryParams.sort_field}
                 sort_direction={queryParams.sort_direction}
                 sortChanged={sortChanged}
               >
                 ID
-              </TableHeading>
+              </TableHeading> */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                 Image
               </th>
@@ -161,6 +172,9 @@ const TasksTable = ({
                 Created By
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+                Assigned To
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                 Actions
               </th>
             </tr>
@@ -168,9 +182,9 @@ const TasksTable = ({
           <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
             {tasks.data.map((task) => (
               <tr key={task.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                   {task.id}
-                </td>
+                </td> */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   <img
                     src={task.image_path}
@@ -207,6 +221,9 @@ const TasksTable = ({
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                   {task.createdBy.name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                  {task.assignedUser.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                   {/* <button

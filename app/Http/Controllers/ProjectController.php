@@ -19,7 +19,7 @@ class ProjectController extends Controller
     public function index()
     {
         $query = Project::query();
-
+        
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
@@ -77,6 +77,8 @@ class ProjectController extends Controller
 
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
+
+        
 
         if (request("name")) {
             $query->where("name", "like", "%" . request("name") . "%");
