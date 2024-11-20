@@ -48,7 +48,7 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
     router.get(route("project.show", project.id));
   };
 
-  // console.log(projects);
+  console.log(projects);
   return (
     <AuthenticatedLayout
       user={auth.user}

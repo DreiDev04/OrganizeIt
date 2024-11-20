@@ -7,6 +7,7 @@ use App\Http\Resources\TaskResource;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -19,7 +20,7 @@ class ProjectController extends Controller
     public function index()
     {
         $query = Project::query();
-        
+
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
@@ -54,15 +55,35 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
+
         $data = $request->validated();
+
         /** @var $image \Illuminate\Http\UploadedFile */
         $image = $data['image'] ?? null;
+
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
+
+        $imageFolder = 'project/' . Str::random();
+
         if ($image) {
-            $data['image_path'] = $image->store('project/' . Str::random(), 'public');
+            $data['image_path'] = $image->store($imageFolder, 'public');
+        } else {
+            $placeholderPath = public_path('placeholder/cat.jpg');
+
+            File::makeDirectory(storage_path('app/public/' . $imageFolder), 0755, true, true);
+
+
+            // TODO: make it random
+
+
+            $destinationPath = storage_path('app/public/' . $imageFolder . '/cat.jpg');
+            File::copy($placeholderPath, $destinationPath);
+
+            $data['image_path'] = $imageFolder . '/cat.jpg';
         }
-        Project::create($data);
+
+        $project = Project::create($data);
 
         return to_route('project.index')
             ->with('success', 'Project was created');
@@ -78,7 +99,7 @@ class ProjectController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        
+
 
         if (request("name")) {
             $query->where("name", "like", "%" . request("name") . "%");
