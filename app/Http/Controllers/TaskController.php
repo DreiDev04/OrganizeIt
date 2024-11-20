@@ -39,7 +39,7 @@ class TaskController extends Controller
             ->paginate(10)
             ->onEachSide(1);
 
-        return inertia("Task/Index", [
+        return inertia("Project/Show", [
             "tasks" => TaskResource::collection($tasks),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
@@ -85,9 +85,21 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Task $task)
+    // public function show(Task $task)
+    // {
+    //     return inertia('Task/Show', [
+    //         'task' => new TaskResource($task),
+    //     ]);
+    // }
+
+    public function show(Project $project, Task $task)
     {
+        // if ($task->project_id !== $project->id) {
+        //     abort(404, "Task not found in this project");
+        // }
+
         return inertia('Task/Show', [
+            'project' => new ProjectResource($project),
             'task' => new TaskResource($task),
         ]);
     }
