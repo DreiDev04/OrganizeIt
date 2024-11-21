@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -43,6 +44,8 @@ class DashboardController extends Controller
       ->limit(10)
       ->get();
     $activeTasks = TaskResource::collection($activeTasks);
+
+    $totalProjectTask = Project::query();
     return inertia(
       'Dashboard',
       compact(
