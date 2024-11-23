@@ -42,8 +42,6 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
     router.get(route("project.index", queryParams));
   };
 
-  
-
   const routeToProject = (project) => {
     router.get(route("project.show", project.id));
   };
@@ -67,6 +65,7 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
       }
     >
       <Head title="Projects" />
+
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="overflow-hidden bg-card shadow-sm sm:rounded-lg ">
@@ -146,47 +145,48 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
                     </tr>
                   </thead>
                   <tbody className="bg-background divide-y ">
-                    {projects.data.map((project) => (
-                      <tr
-                        key={project.id}
-                        className="hover:bg-card_light cursor-pointer"
-                        onClick={() => routeToProject(project)}
-                      >
-                        {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                    {projects.data.length ? (
+                      projects.data.map((project) => (
+                        <tr
+                          key={project.id}
+                          className="hover:bg-card_light cursor-pointer"
+                          onClick={() => routeToProject(project)}
+                        >
+                          {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                           {project.id}
                         </td> */}
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <img
-                            src={project.image_path}
-                            alt={project.name}
-                            className="w-10 h-10 rounded-full object-cover"
-                          />
-                        </td>
-                        <td className="px-6 py-4  text-sm text-gray-500 dark:text-gray-300 font-bold">
-                          {/* <Link href={route("project.show", project.id)}> */}
-                          {project.name}
-                          {/* </Link> */}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                          <span
-                            className={
-                              PROJECT_STATUS_CLASS_MAP[project.status] +
-                              " inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium "
-                            }
-                          >
-                            {PROJECT_STATUS_TEXT_MAP[project.status]}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 ">
-                          {project.created_at}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 ">
-                          {project.due_date}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                          {project.createdBy.name}
-                        </td>
-                        {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 text-nowrap">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <img
+                              src={project.image_path}
+                              alt={project.name}
+                              className="w-10 h-10 rounded-full object-cover"
+                            />
+                          </td>
+                          <td className="px-6 py-4  text-sm text-gray-500 dark:text-gray-300 font-bold">
+                            {/* <Link href={route("project.show", project.id)}> */}
+                            {project.name}
+                            {/* </Link> */}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                            <span
+                              className={
+                                PROJECT_STATUS_CLASS_MAP[project.status] +
+                                " inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium "
+                              }
+                            >
+                              {PROJECT_STATUS_TEXT_MAP[project.status]}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 ">
+                            {project.created_at}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 ">
+                            {project.due_date}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                            {project.createdBy.name}
+                          </td>
+                          {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 text-nowrap">
                           <Link
                             href={route("project.edit", project.id)}
                             className="text-indigo-600 hover:text-indigo-900"
@@ -201,9 +201,16 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
                             Delete
                           </button>
                         </td> */}
-                        {/* </Link> */}
+                          {/* </Link> */}
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="6" className="text-center h-32">
+                          No data found
+                        </td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               </div>
