@@ -19,11 +19,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource("project", ProjectController::class);
     Route::get("/task/my-tasks", [TaskController::class, "myTasks"])->name("task.myTasks");
     Route::resource("task", TaskController::class);
-    
+
     Route::get('task/create/{project}', [TaskController::class, 'create'])->name('task.create');
     Route::get('project/{project}/task/{task}', [TaskController::class, 'show'])->name('task.show');
     Route::get('project/{project}/task/{task}/edit', [TaskController::class, 'edit'])->name('task.edit');
-    
+
+
+    Route::get('project/{project}/join', [ProjectController::class, 'join'])->name('project.join');
 
 
 
