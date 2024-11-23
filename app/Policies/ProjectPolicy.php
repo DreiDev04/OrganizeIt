@@ -33,4 +33,9 @@ class ProjectPolicy
         // Allow only if the user is a member of the project
         return $project->members->contains($user->id);
     }
+    public function join(User $user, Project $project)
+    {
+        // Example: Prevent joining if the project is archived
+        return !$project->is_archived;
+    }
 }

@@ -11,13 +11,16 @@ use File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Http\Controllers\Controller;
 
 class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    use AuthorizesRequests;
     public function index()
     {
         $query = Project::query();
@@ -178,7 +181,14 @@ class ProjectController extends Controller
 
     public function join(Project $project)
     {
+        // Ensure the user is authenticated
         $user = Auth::user();
+        if (!$user) {
+            return back()->with('error', 'You must be logged in to join a project.');
+        }
+
+        // Authorization: Check if the user is allowed to join the project
+        $this->authorize('join', $project);
 
         // Check if the user is already a member
         if ($project->members()->where('user_id', $user->id)->exists()) {
@@ -190,5 +200,5 @@ class ProjectController extends Controller
 
         return back()->with('success', "You have successfully joined the project: {$project->name}.");
     }
-    
+
 }
