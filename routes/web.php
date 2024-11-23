@@ -26,7 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     Route::get('project/{project}/join', [ProjectController::class, 'join'])->name('project.join');
-
+    Route::post('project/{project}/leave', [ProjectController::class, 'leave'])->name('project.leave');
 
 
     Route::resource("user", UserController::class);

@@ -4,6 +4,7 @@ import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constant";
 import TasksTable from "../Task/TasksTable";
 import { useToast } from "@/Components/Toast";
 import { useEffect } from "react";
+import { Button } from "@headlessui/react";
 
 export default function Show({
   auth,
@@ -27,6 +28,14 @@ export default function Show({
     router.delete(route("project.destroy", project.id));
   };
 
+  const leaveProject = (project) => {
+    if (!confirm("Are you sure you want to leave this project?")) {
+      return;
+    }
+
+    router.post(route("project.leave", project.id));
+  };
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -35,17 +44,6 @@ export default function Show({
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {`Project "${project.name}"`}
           </h2>
-          {/* {!isMember ? (
-            <Link
-              href={route("project.join", project.id)}
-              className="bg-primary py-1 px-3  rounded shadow transition-all hover:bg-blue-700"
-            >
-              Join Project
-            </Link>
-          ) : (
-            
-          )} */}
-
           {!isMember ? (
             <Link
               href={route("project.join", project.id)}
@@ -53,16 +51,14 @@ export default function Show({
             >
               Join Project
             </Link>
-          ) : (
-            <>
-            </>
-            // <Link
-            //   href={route("project.leave", project.id)}
-            //   className="bg-danger py-1 px-3  rounded shadow transition-all hover:bg-red-700"
-            // >
-            //   Leave Project
-            // </Link>
-          )}
+          ) : !isCreator ? (
+            <Button
+              onClick={(e) => leaveProject(project)}
+              className="bg-danger py-1 px-3 rounded shadow transition-all hover:bg-red-700"
+            >
+              Leave Project
+            </Button>
+          ) : null}
           {isCreator && (
             <div className="flex gap-2">
               <Link

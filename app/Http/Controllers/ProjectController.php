@@ -192,4 +192,17 @@ class ProjectController extends Controller
 
         return redirect()->route('project.show', $project->id)->with('success', 'You have successfully joined the project.');
     }
+
+    public function leave(Project $project)
+    {
+        // Check if the user is a member
+        if (!$project->users->contains(auth()->id())) {
+            return redirect()->route('project.show', $project->id)->with('info', 'You are not a member of this project.');
+        }
+
+        // Remove the current user as a member
+        $project->users()->detach(auth()->id());
+
+        return redirect()->route('project.index')->with('success', 'You have successfully left the project.');
+    }
 }
