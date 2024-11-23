@@ -55,37 +55,29 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-
         $data = $request->validated();
-
         /** @var $image \Illuminate\Http\UploadedFile */
         $image = $data['image'] ?? null;
-
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
-
         $imageFolder = 'project/' . Str::random();
-
         $placeholderName = "placeholder-3.png";
-
         if ($image) {
             $data['image_path'] = $image->store($imageFolder, 'public');
         } else {
             $placeholderPath = public_path("placeholder/{$placeholderName}");
-
             File::makeDirectory(storage_path("app/public/{$imageFolder}"), 0755, true, true);
-
-
-            // TODO: make it random
-
-
             $destinationPath = storage_path("app/public/{$imageFolder}{$placeholderName}");
             File::copy($placeholderPath, $destinationPath);
 
             $data['image_path'] = "{$imageFolder}{$placeholderName}";
         }
 
-        Project::create($data);
+        // Create the project
+        $project = Project::create($data);
+
+        // Automatically associate the creator (current user) as a member
+        $project->users()->attach(auth()->id());
 
         return to_route('project.index')
             ->with('success', 'Project was created');
@@ -96,13 +88,17 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        // if (!$project->users->contains(auth()->id())) {
+        //     return redirect()->route('dashboard')->with('error', 'You are not a member of this project');
+        // }
+
+        $isMember = $project->users->contains(auth()->id());
+        $isCreator = $project->created_by === auth()->id();
         $query = $project->tasks();
+
 
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
-
-
-
         if (request("name")) {
             $query->where("name", "like", "%" . request("name") . "%");
         }
@@ -113,11 +109,15 @@ class ProjectController extends Controller
         $tasks = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
             ->onEachSide(1);
+
+
         return inertia('Project/Show', [
             'project' => new ProjectResource($project),
             "tasks" => TaskResource::collection($tasks),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
+            'isMember' => $isMember,
+            'isCreator' => $isCreator
         ]);
     }
 
@@ -126,6 +126,10 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        if (!$project->users->contains(auth()->id())) {
+            return redirect()->route('dashboard')->with('error', 'You are not a member of this project');
+        }
+
         return inertia('Project/Edit', [
             'project' => new ProjectResource($project),
         ]);
@@ -156,6 +160,9 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        if (!$project->users->contains(auth()->id())) {
+            return redirect()->route('dashboard')->with('error', 'You are not a member of this project');
+        }
         $name = $project->name;
 
         // Delete tasks associated with the project
@@ -171,5 +178,18 @@ class ProjectController extends Controller
 
         return to_route('project.index')
             ->with('success', "Project \"$name\" was deleted along with its tasks");
+    }
+
+    public function join(Project $project)
+    {
+        // Check if the user is already a member
+        if ($project->users->contains(auth()->id())) {
+            return redirect()->route('project.show', $project->id)->with('info', 'You are already a member of this project.');
+        }
+
+        // Add the current user as a member
+        $project->users()->attach(auth()->id());
+
+        return redirect()->route('project.show', $project->id)->with('success', 'You have successfully joined the project.');
     }
 }

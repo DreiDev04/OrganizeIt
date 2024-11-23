@@ -5,7 +5,15 @@ import TasksTable from "../Task/TasksTable";
 import { useToast } from "@/Components/Toast";
 import { useEffect } from "react";
 
-export default function Show({ auth, success, project, tasks, queryParams }) {
+export default function Show({
+  auth,
+  success,
+  project,
+  tasks,
+  queryParams,
+  isMember,
+  isCreator,
+}) {
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -27,20 +35,50 @@ export default function Show({ auth, success, project, tasks, queryParams }) {
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {`Project "${project.name}"`}
           </h2>
-          <div className="flex gap-2">
+          {/* {!isMember ? (
             <Link
-              href={route("project.edit", project.id)}
-              className="bg-green py-1 px-3 text-white rounded shadow transition-all hover:bg-green-700"
+              href={route("project.join", project.id)}
+              className="bg-primary py-1 px-3  rounded shadow transition-all hover:bg-blue-700"
             >
-              Edit
+              Join Project
             </Link>
-            <button
-              onClick={(e) => deleteProject(project)}
-              className="bg-danger py-1 px-3 text-foreground rounded shadow transition-all hover:bg-red-700"
+          ) : (
+            
+          )} */}
+
+          {!isMember ? (
+            <Link
+              href={route("project.join", project.id)}
+              className="bg-primary py-1 px-3  rounded shadow transition-all hover:bg-blue-700"
             >
-              Delete
-            </button>
-          </div>
+              Join Project
+            </Link>
+          ) : (
+            <>
+            </>
+            // <Link
+            //   href={route("project.leave", project.id)}
+            //   className="bg-danger py-1 px-3  rounded shadow transition-all hover:bg-red-700"
+            // >
+            //   Leave Project
+            // </Link>
+          )}
+          {isCreator && (
+            <div className="flex gap-2">
+              <Link
+                href={route("project.edit", project.id)}
+                className="bg-green py-1 px-3 text-foreground rounded shadow transition-all hover:bg-green-700"
+              >
+                Edit
+              </Link>
+              <button
+                onClick={(e) => deleteProject(project)}
+                className="bg-danger py-1 px-3 text-foreground rounded shadow transition-all hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          )}
         </div>
       }
     >

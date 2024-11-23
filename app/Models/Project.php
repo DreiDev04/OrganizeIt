@@ -32,5 +32,19 @@ class Project extends Model
     public function updatedBy()
     {
         return $this->belongsTo(User::class, 'updated_by');
-    } 
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function isAdmin(User $user)
+    {
+        return $this->created_by == $user->id;
+    }
 }
