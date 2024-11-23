@@ -5,7 +5,14 @@ import TasksTable from "../Task/TasksTable";
 import { useToast } from "@/Components/Toast";
 import { useEffect } from "react";
 
-export default function Show({ auth, success, project, tasks, queryParams }) {
+export default function Show({
+  auth,
+  success,
+  project,
+  tasks,
+  queryParams,
+  isMember,
+}) {
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -40,6 +47,17 @@ export default function Show({ auth, success, project, tasks, queryParams }) {
             >
               Delete
             </button>
+
+            {!isMember && (
+              <button
+                onClick={() =>
+                  router.post(route("project.join", { project: project.id }))
+                }
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Join Project
+              </button>
+            )}
           </div>
         </div>
       }

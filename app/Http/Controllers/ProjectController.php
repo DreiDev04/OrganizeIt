@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+
 class ProjectController extends Controller
 {
     /**
@@ -100,6 +101,7 @@ class ProjectController extends Controller
 
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
+        $isMember = $project->members->contains(Auth::id());
 
 
 
@@ -118,6 +120,7 @@ class ProjectController extends Controller
             "tasks" => TaskResource::collection($tasks),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
+            'isMember' => $isMember,
         ]);
     }
 
@@ -172,4 +175,20 @@ class ProjectController extends Controller
         return to_route('project.index')
             ->with('success', "Project \"$name\" was deleted along with its tasks");
     }
+
+    public function join(Project $project)
+    {
+        $user = Auth::user();
+
+        // Check if the user is already a member
+        if ($project->members()->where('user_id', $user->id)->exists()) {
+            return back()->with('error', 'You are already a member of this project.');
+        }
+
+        // Add the user to the project
+        $project->members()->attach($user);
+
+        return back()->with('success', "You have successfully joined the project: {$project->name}.");
+    }
+    
 }
