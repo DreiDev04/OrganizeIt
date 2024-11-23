@@ -66,24 +66,26 @@ class ProjectController extends Controller
 
         $imageFolder = 'project/' . Str::random();
 
+        $placeholderName = "placeholder-3.png";
+
         if ($image) {
             $data['image_path'] = $image->store($imageFolder, 'public');
         } else {
-            $placeholderPath = public_path('placeholder/cat.jpg');
+            $placeholderPath = public_path("placeholder/{$placeholderName}");
 
-            File::makeDirectory(storage_path('app/public/' . $imageFolder), 0755, true, true);
+            File::makeDirectory(storage_path("app/public/{$imageFolder}"), 0755, true, true);
 
 
             // TODO: make it random
 
 
-            $destinationPath = storage_path('app/public/' . $imageFolder . '/cat.jpg');
+            $destinationPath = storage_path("app/public/{$imageFolder}{$placeholderName}");
             File::copy($placeholderPath, $destinationPath);
 
-            $data['image_path'] = $imageFolder . '/cat.jpg';
+            $data['image_path'] = "{$imageFolder}{$placeholderName}";
         }
 
-        $project = Project::create($data);
+        Project::create($data);
 
         return to_route('project.index')
             ->with('success', 'Project was created');

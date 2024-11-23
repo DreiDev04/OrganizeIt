@@ -186,67 +186,68 @@ const TasksTable = ({
             </tr>
           </thead>
           <tbody className=" divide-y divide-gray-3 bg-background">
-            {tasks.data.map((task) => (
-              <tr key={task.id}>
-                {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+            {tasks.data.length ? (
+              tasks.data.map((task) => (
+                <tr key={task.id}>
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                   {task.id}
                 </td> */}
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <img
-                    src={task.image_path}
-                    alt={task.name}
-                    className="w-10 h-10 rounded-full"
-                  />
-                </td>
-                {!hideProjectCols && (
-                  <td className="px-6 py-4  text-sm text-foreground ">
-                    {task.project.name}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <img
+                      src={task.image_path}
+                      alt={task.name}
+                      className="w-10 h-10 rounded-full"
+                    />
                   </td>
-                )}
-                {/* <td className="px-6 py-4  text-sm text-foreground ">
+                  {!hideProjectCols && (
+                    <td className="px-6 py-4  text-sm text-foreground ">
+                      {task.project.name}
+                    </td>
+                  )}
+                  {/* <td className="px-6 py-4  text-sm text-foreground ">
                   {task.project.name}
                 </td> */}
-                <td className="px-6 py-4  text-sm text-foregroundhover:underline font-bold ">
-                  <Link
-                    href={route("task.show", {
-                      project: project.id, // The project ID
-                      task: task.id, // The task ID
-                    })}
-                  >
-                    {task.name}
-                  </Link>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                  <span
-                    className={
-                      TASK_STATUS_CLASS_MAP[task.status] +
-                      " inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium "
-                    }
-                  >
-                    {TASK_STATUS_TEXT_MAP[task.status]}
-                  </span>
-                </td>
-                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                  <td className="px-6 py-4  text-sm text-foregroundhover:underline font-bold ">
+                    <Link
+                      href={route("task.show", {
+                        project: project.id, // The project ID
+                        task: task.id, // The task ID
+                      })}
+                    >
+                      {task.name}
+                    </Link>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                    <span
+                      className={
+                        TASK_STATUS_CLASS_MAP[task.status] +
+                        " inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium "
+                      }
+                    >
+                      {TASK_STATUS_TEXT_MAP[task.status]}
+                    </span>
+                  </td>
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                   {task.created_at}
                 </td> */}
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                  {task.due_date}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                  {task.createdBy.name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                  {task.assignedUser.name}
-                </td>
-                <td
-                  className={
-                    "px-6 py-4 whitespace-nowrap text-sm text-foreground " +
-                    TASK_PRIORITY_CLASS_MAP[task.priority]
-                  }
-                >
-                  {TASK_PRIORITY_TEXT_MAP[task.priority]}
-                </td>
-                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground justify-center align-middle">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                    {task.due_date}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                    {task.createdBy.name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                    {task.assignedUser.name}
+                  </td>
+                  <td
+                    className={
+                      "px-6 py-4 whitespace-nowrap text-sm text-foreground " +
+                      TASK_PRIORITY_CLASS_MAP[task.priority]
+                    }
+                  >
+                    {TASK_PRIORITY_TEXT_MAP[task.priority]}
+                  </td>
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground justify-center align-middle">
                   <span
                     className={
                       TASK_PRIORITY_CLASS_MAP[task.priority] +
@@ -256,8 +257,8 @@ const TasksTable = ({
                     {TASK_PRIORITY_TEXT_MAP[task.priority]}
                   </span>
                 </td> */}
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                  {/* <Link
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                    {/* <Link
                     href={route("task.edit", {
                       project: project.id,
                       task: task.id,
@@ -266,24 +267,31 @@ const TasksTable = ({
                   >
                     Edit
                   </Link> */}
-                  <Link
-                    href={route("task.edit", {
-                      project: project.id, // The project ID
-                      task: task.id, // The task ID
-                    })}
-                    className="text-indigo-600 hover:text-indigo-900"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={(e) => deleteTask(task)}
-                    className="ml-4 text-red-600 hover:text-red-900"
-                  >
-                    Delete
-                  </button>
+                    <Link
+                      href={route("task.edit", {
+                        project: project.id, // The project ID
+                        task: task.id, // The task ID
+                      })}
+                      className="text-indigo-600 hover:text-indigo-900"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={(e) => deleteTask(task)}
+                      className="ml-4 text-red-600 hover:text-red-900"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="8" className="text-center h-32">
+                  No data found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

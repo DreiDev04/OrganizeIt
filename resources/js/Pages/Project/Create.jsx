@@ -112,7 +112,7 @@ export default function Create({ auth }) {
                   className="mt-1 block w-full"
                   onChange={(e) => setData("status", e.target.value)}
                 >
-                  <option value="" disabled>Select Status</option>
+                  <option value="">Select Status</option>
                   <option value="pending">Pending</option>
                   <option value="in_progress">In Progress</option>
                   <option value="completed">Completed</option>
