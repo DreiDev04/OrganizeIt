@@ -26,7 +26,7 @@ class StoreTaskRequest extends FormRequest
             "name" => ['required', 'max:255'],
             'image' => ['nullable', 'image'],
             "description" => ['nullable', 'string'],
-            'due_date' => ['nullable', 'date'],
+            'due_date' => "required|date|after_or_equal:today",
             'project_id' => ['required', 'exists:projects,id'],
             'assigned_user_id' => ['required', 'exists:users,id'],
             'status' => [

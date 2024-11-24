@@ -89,4 +89,17 @@
         @apply bg-background text-foreground;
         font-feature-settings: "rlig" 1, "calt" 1;
     }
+    .cont {
+        @apply px-24 py-12;
+    }
+    .cont-card {
+        @apply p-5;
+    }
+    .heading {
+        @apply text-xl font-bold;
+    }
+}
+
+* {
+    /* border: 1px solid red; */
 }

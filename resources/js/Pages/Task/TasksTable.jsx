@@ -239,15 +239,15 @@ const TasksTable = ({
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                     {task.assignedUser.name}
                   </td>
-                  <td
+                  {/* <td
                     className={
                       "px-6 py-4 whitespace-nowrap text-sm text-foreground " +
                       TASK_PRIORITY_CLASS_MAP[task.priority]
                     }
                   >
                     {TASK_PRIORITY_TEXT_MAP[task.priority]}
-                  </td>
-                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground justify-center align-middle">
+                  </td> */}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground justify-center align-middle">
                   <span
                     className={
                       TASK_PRIORITY_CLASS_MAP[task.priority] +
@@ -256,7 +256,7 @@ const TasksTable = ({
                   >
                     {TASK_PRIORITY_TEXT_MAP[task.priority]}
                   </span>
-                </td> */}
+                </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                     {/* <Link
                     href={route("task.edit", {
