@@ -6,7 +6,7 @@ const getBaseStyles = () =>
 const getVariantStyles = (variant, danger) => {
   const styles = {
     default: {
-      true: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-500",
+      true: "bg-red-500 text-white hover:text-white hover:bg-red-700 focus:ring-red-500",
       false: "bg-primary text-white hover:bg-blue-700 focus:ring-gray-500",
     },
     outline: {

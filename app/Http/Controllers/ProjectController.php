@@ -62,26 +62,29 @@ class ProjectController extends Controller
         $data['updated_by'] = Auth::id();
         $imageFolder = 'project/' . Str::random();
         $placeholderName = "placeholder-3.png";
+
         if ($image) {
             $data['image_path'] = $image->store($imageFolder, 'public');
         } else {
             $placeholderPath = public_path("placeholder/{$placeholderName}");
+
             File::makeDirectory(storage_path("app/public/{$imageFolder}"), 0755, true, true);
-            $destinationPath = storage_path("app/public/{$imageFolder}{$placeholderName}");
+
+            $destinationPath = storage_path("app/public/{$imageFolder}/{$placeholderName}");
+
             File::copy($placeholderPath, $destinationPath);
 
-            $data['image_path'] = "{$imageFolder}{$placeholderName}";
+            $data['image_path'] = "{$imageFolder}/{$placeholderName}";
         }
 
-        // Create the project
         $project = Project::create($data);
 
-        // Automatically associate the creator (current user) as a member
         $project->users()->attach(auth()->id());
 
         return to_route('project.index')
             ->with('success', 'Project was created');
     }
+
 
     /**
      * Display the specified resource.

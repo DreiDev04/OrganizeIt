@@ -27,14 +27,13 @@ export default function Create({ auth, task, project, users }) {
 
   // console.log(data);
 
-
   return (
     <AuthenticatedLayout
       user={auth.user}
       header={
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Edit task "{task.name}"
+            Edit task {task.name}
           </h2>
         </div>
       }
@@ -48,11 +47,11 @@ export default function Create({ auth, task, project, users }) {
               onSubmit={onSubmit}
               className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
             >
-              {task.image_path && (
+              {/* {task.image_path && (
                 <div className="mb-4">
                   <img src={task.image_path} className="w-64" />
                 </div>
-              )}
+              )} */}
               <div>
                 <InputLabel htmlFor="task_project_id" value="Project" />
 
@@ -64,12 +63,11 @@ export default function Create({ auth, task, project, users }) {
                   disabled
                 >
                   <option value={project.id}>{project.name}</option>
-
                 </SelectInput>
 
                 <InputError message={errors.project_id} className="mt-2" />
               </div>
-              <div className="mt-4">
+              {/* <div className="mt-4">
                 <InputLabel htmlFor="task_image_path" value="Task Image" />
                 <TextInput
                   id="task_image_path"
@@ -79,7 +77,7 @@ export default function Create({ auth, task, project, users }) {
                   onChange={(e) => setData("image", e.target.files[0])}
                 />
                 <InputError message={errors.image} className="mt-2" />
-              </div>
+              </div> */}
               <div className="mt-4">
                 <InputLabel htmlFor="task_name" value="Task Name" />
 
@@ -191,7 +189,7 @@ export default function Create({ auth, task, project, users }) {
               </div>
 
               <div className="mt-4 text-right">
-              <Link
+                <Link
                   href={route("project.show", project.id)}
                   className=" py-1 px-3 rounded shadow transition-all bg-danger mr-4"
                 >

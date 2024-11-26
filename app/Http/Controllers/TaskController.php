@@ -69,10 +69,11 @@ class TaskController extends Controller
     {
         $data = $request->validated();
         $project_id = $data['project_id'];
-        /** @var $image \Illuminate\Http\UploadedFile */
+
         $image = $data['image'] ?? null;
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
+
         if ($image) {
             $data['image_path'] = $image->store('task/' . Str::random(), 'public');
         }
@@ -109,8 +110,6 @@ class TaskController extends Controller
      */
     public function edit(Project $project, Task $task)
     {
-
-
         $users = User::query()->orderBy('name', 'asc')->get();
 
         return inertia("Task/Edit", [
@@ -149,6 +148,7 @@ class TaskController extends Controller
         // dd($project_id);
 
         $task->delete();
+
         if ($task->image_path) {
             Storage::disk('public')->deleteDirectory(dirname($task->image_path));
         }

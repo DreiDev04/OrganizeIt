@@ -76,8 +76,16 @@ const TasksTable = ({
       return;
     }
     router.delete(
-      route("task.destroy", { task: task.id, project_id: project.id })
+      route("task.destroy", { project_id: project.id, task: task.id })
     );
+  };
+
+  const editTask = (task) => {
+    router.get(route("task.edit", { project: project.id, task: task.id }));
+  }
+
+  const routeToTask = (task) => {
+    router.get(route("task.show", { task: task.id, project: project.id }));
   };
 
   console.log(tasks);
@@ -118,17 +126,6 @@ const TasksTable = ({
         <table className="min-w-full divide-y">
           <thead className="bg-card_dark">
             <tr>
-              {/* <TableHeading
-                name="id"
-                sort_field={queryParams.sort_field}
-                sort_direction={queryParams.sort_direction}
-                sortChanged={sortChanged}
-              >
-                ID
-              </TableHeading> */}
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                Image
-              </th>
               {!hideProjectCols && (
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                   Project Name
@@ -150,14 +147,6 @@ const TasksTable = ({
               >
                 Status
               </TableHeading>
-              {/* <TableHeading
-                name="created_at"
-                sort_field={queryParams.sort_field}
-                sort_direction={queryParams.sort_direction}
-                sortChanged={sortChanged}
-              >
-                Create Date
-              </TableHeading> */}
               <TableHeading
                 name="due_date"
                 sort_field={queryParams.sort_field}
@@ -188,34 +177,18 @@ const TasksTable = ({
           <tbody className=" divide-y divide-gray-3 bg-background">
             {tasks.data.length ? (
               tasks.data.map((task) => (
-                <tr key={task.id}>
-                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                  {task.id}
-                </td> */}
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <img
-                      src={task.image_path}
-                      alt={task.name}
-                      className="w-10 h-10 rounded-full"
-                    />
-                  </td>
+                <tr
+                  key={task.id}
+                  className="hover:bg-card_light cursor-pointer"
+                  onClick={() => routeToTask(task)}
+                >
                   {!hideProjectCols && (
                     <td className="px-6 py-4  text-sm text-foreground ">
                       {task.project.name}
                     </td>
                   )}
-                  {/* <td className="px-6 py-4  text-sm text-foreground ">
-                  {task.project.name}
-                </td> */}
                   <td className="px-6 py-4  text-sm text-foregroundhover:underline font-bold ">
-                    <Link
-                      href={route("task.show", {
-                        project: project.id, // The project ID
-                        task: task.id, // The task ID
-                      })}
-                    >
-                      {task.name}
-                    </Link>
+                    {task.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                     <span
@@ -227,9 +200,6 @@ const TasksTable = ({
                       {TASK_STATUS_TEXT_MAP[task.status]}
                     </span>
                   </td>
-                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                  {task.created_at}
-                </td> */}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                     {task.due_date}
                   </td>
@@ -239,49 +209,36 @@ const TasksTable = ({
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                     {task.assignedUser.name}
                   </td>
-                  {/* <td
-                    className={
-                      "px-6 py-4 whitespace-nowrap text-sm text-foreground " +
-                      TASK_PRIORITY_CLASS_MAP[task.priority]
-                    }
-                  >
-                    {TASK_PRIORITY_TEXT_MAP[task.priority]}
-                  </td> */}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground justify-center align-middle">
-                  <span
-                    className={
-                      TASK_PRIORITY_CLASS_MAP[task.priority] +
-                      " inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium "
-                    }
-                  >
-                    {TASK_PRIORITY_TEXT_MAP[task.priority]}
-                  </span>
-                </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                    {/* <Link
-                    href={route("task.edit", {
-                      project: project.id,
-                      task: task.id,
-                    })}
-                    className="text-indigo-600 hover:text-indigo-900"
-                  >
-                    Edit
-                  </Link> */}
-                    <Link
-                      href={route("task.edit", {
-                        project: project.id, // The project ID
-                        task: task.id, // The task ID
-                      })}
-                      className="text-indigo-600 hover:text-indigo-900"
+                    <span
+                      className={
+                        TASK_PRIORITY_CLASS_MAP[task.priority] +
+                        " inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium "
+                      }
+                    >
+                      {TASK_PRIORITY_TEXT_MAP[task.priority]}
+                    </span>
+                  </td>
+                  <td className=" py-4 whitespace-nowrap text-sm text-foreground">
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        editTask(task);
+                      }}
+                      
                     >
                       Edit
-                    </Link>
-                    <button
-                      onClick={(e) => deleteTask(task)}
+                    </Button>
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteTask(task);
+                      }}
+                      danger
                       className="ml-4 text-red-600 hover:text-red-900"
                     >
                       Delete
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))

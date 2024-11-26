@@ -22,6 +22,8 @@ export default function Create({ auth, project }) {
     post(route("project.update", project.id));
   };
 
+  console.log("project",project);
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -42,11 +44,11 @@ export default function Create({ auth, project }) {
               onSubmit={onSubmit}
               className="p-4 sm:p-8 shadow sm:rounded-lg"
             >
-              {project.image_path && (
+              {/* {project.image_path && (
                 <div className="mb-4">
                   <img src={project.image_path} className="w-64" />
                 </div>
-              )}
+              )} */}
               <div>
                 <InputLabel
                   htmlFor="project_image_path"
