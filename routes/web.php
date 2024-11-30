@@ -14,6 +14,8 @@ Route::get('/', function () {
     return Inertia::render('Welcome'); // Ensure you have a Welcome component in your resources/js/Pages directory
 })->name('welcome');
 
+// Auth::routes(['verify' => true]);
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get("/dashboard", [DashboardController::class, "index"])->name("dashboard");
     Route::resource("project", ProjectController::class);
@@ -27,9 +29,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('project/{project}/join', [ProjectController::class, 'join'])->name('project.join');
     Route::post('project/{project}/leave', [ProjectController::class, 'leave'])->name('project.leave');
-
-
     Route::resource("user", UserController::class);
+
+
 });
 
 Route::middleware('auth')->group(function () {
