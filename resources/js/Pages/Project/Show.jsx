@@ -9,7 +9,7 @@ import { CiCalendar, CiUser } from "react-icons/ci";
 import { FaTasks, FaRegCheckCircle, FaRegClock } from "react-icons/fa";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { IoIosInformationCircleOutline } from "react-icons/io";
-
+import { RiProgress5Line } from "react-icons/ri";
 
 export default function Show({
   auth,
@@ -19,6 +19,7 @@ export default function Show({
   queryParams,
   isMember,
   isCreator,
+  users_in_project,
 }) {
   const { showToast } = useToast();
 
@@ -41,7 +42,18 @@ export default function Show({
     router.post(route("project.leave", project.id));
   };
 
-  console.log(project);
+  console.log("Project: ", project);
+  console.log("Tasks: ", tasks);
+  console.log("Users in Project: ", users_in_project);
+
+  const totalTasks = tasks.data.length;
+  const completedTasks = tasks.data.filter(
+    (task) => task.status === "completed"
+  ).length;
+  const pendingTasks = tasks.data.filter(
+    (task) => task.status === "in_progress"
+  ).length;
+  const in_progress = tasks.data.filter((task) => task.status === 3).length;
 
   return (
     <AuthenticatedLayout
@@ -110,20 +122,22 @@ export default function Show({
     >
       <Head title={project.name} />
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-10">
-        <div className="grid grid-cols-4 min-h-28 gap-10 mt-10" >
+        <div className="grid grid-cols-4 min-h-28 gap-10 mt-10">
           <div className="border-2 rounded-lg container flex items-center justify-between">
             <div>
               <h1 className="text-md font-bold text-gray-400">Total Task</h1>
-              <p className="text-2xl font-bold">10</p>
+              <p className="text-2xl font-bold">{totalTasks || 0}</p>
             </div>
             <div>
-              <FaTasks className="w-12 h-12 text-blues" />
+              <FaTasks className="w-12 h-12 text-white" />
             </div>
           </div>
           <div className="border-2 rounded-lg container flex items-center justify-between">
             <div className="">
               <h1 className="text-md font-bold text-gray-400">Completed </h1>
-              <p className="text-2xl font-bold text-green">10</p>
+              <p className="text-2xl font-bold text-green">
+                {completedTasks || 0}
+              </p>
             </div>
             <div>
               <FaRegCheckCircle className="w-12 h-12 text-green" />
@@ -132,7 +146,9 @@ export default function Show({
           <div className="border-2 rounded-lg container flex items-center justify-between">
             <div className="">
               <h1 className="text-md font-bold text-gray-400">Pending</h1>
-              <p className="text-2xl font-bold text-amber">10</p>
+              <p className="text-2xl font-bold text-amber">
+                {pendingTasks || 0}
+              </p>
             </div>
             <div>
               <FaRegClock className="w-12 h-12 text-amber" />
@@ -140,11 +156,13 @@ export default function Show({
           </div>
           <div className="border-2 rounded-lg container flex items-center justify-between">
             <div className="">
-              <h1 className="text-md font-bold text-gray-400">Overdue</h1>
-              <p className="text-2xl font-bold text-danger">10</p>
+              <h1 className="text-md font-bold text-gray-400">In Progress</h1>
+              <p className="text-2xl font-bold text-blues">
+                {in_progress || 0}
+              </p>
             </div>
             <div>
-              <AiOutlineExclamationCircle className="w-12 h-12 text-danger" />
+              <RiProgress5Line className="w-12 h-12 text-blues" />
             </div>
           </div>
         </div>
@@ -155,11 +173,11 @@ export default function Show({
                 <span>
                   <IoIosInformationCircleOutline className="w-6 h-6" />
                 </span>
-                Project Description</h3>
+                Project Description
+              </h3>
               <p className="text-sm text-gray-400">
                 {project.description || "No description available"}
               </p>
-
             </div>
             <div>
               {/* <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
@@ -185,104 +203,50 @@ export default function Show({
 
           <div className="col-span-1 border rounded-lg p-4  shadow-sm">
             <h1 className="text-lg font-semibold mb-4">Members:</h1>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b pb-2">
-                <div>
-                  <h3 className="font-medium">John Doe</h3>
-                  <span className="text-sm text-gray-500">
-                    johndoe@example.com
-                  </span>
+            {users_in_project.data.map((user) => (
+              <div className="space-y-4" key={user.id}>
+                <div className="flex items-center justify-between border-b p-2">
+                  <div>
+                    <h3 className="font-medium">{user.name}</h3>
+                    <span className="text-sm text-gray-500">{user.email}</span>
+                  </div>
+                  {/* TODO: Link the real profile */}
+                  {/* <button className="text-sm text-blue-500 hover:underline">
+                    View
+                  </button> */}
                 </div>
-                {/* TODO: Link the real profile */}
-                {/* <button className="text-sm text-blue-500 hover:underline">
-                  View
-                </button> */}
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="bg-card overflow-hidden shadow-sm sm:rounded-lg">
-            <div>
-              <img
-                src={project.image_path}
-                alt=""
-                className="w-full h-64 object-cover"
-              />
-            </div>
-            <div className="p-6 text-gray-900 dark:text-gray-100">
-              <div className="grid gap-1 grid-cols-2 mt-2">
-                <div>
-                  <div>
-                    <label className="font-bold text-lg">Project ID</label>
-                    <p className="mt-1">{project.id}</p>
-                  </div>
-                  <div className="mt-4">
-                    <label className="font-bold text-lg">Project Name</label>
-                    <p className="mt-1">{project.name}</p>
-                  </div>
-
-                  <div className="mt-4">
-                    <label className="font-bold text-lg">Project Status</label>
-                    <p className="mt-1">
-                      <span
-                        className={
-                          "px-2 py-1 rounded text-white " +
-                          PROJECT_STATUS_CLASS_MAP[project.status]
-                        }
-                      >
-                        {PROJECT_STATUS_TEXT_MAP[project.status]}
-                      </span>
-                    </p>
-                  </div>
-                  <div className="mt-4">
-                    <label className="font-bold text-lg">Created By</label>
-                    <p className="mt-1">{project.createdBy.name}</p>
-                  </div>
-                </div>
-                <div>
-                  <div>
-                    <label className="font-bold text-lg">Due Date</label>
-                    <p className="mt-1">{project.due_date}</p>
-                  </div>
-                  <div className="mt-4">
-                    <label className="font-bold text-lg">Create Date</label>
-                    <p className="mt-1">{project.created_at}</p>
-                  </div>
-                  <div className="mt-4">
-                    <label className="font-bold text-lg">Updated By</label>
-                    <p className="mt-1">{project.updatedBy.name}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4">
-                <label className="font-bold text-lg">Project Description</label>
-                <p className="mt-1">{project.description}</p>
+      {isMember ? (
+        <div className="pb-12 mt-10">
+          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+              <div className="p-6 bg-card">
+                <TasksTable
+                  tasks={tasks}
+                  success={success}
+                  queryParams={queryParams}
+                  hideProjectCols={true}
+                  project={project}
+                />
               </div>
             </div>
           </div>
         </div>
-      </div> */}
-
-      <div className="pb-12 mt-10">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div className="p-6 bg-card">
-              <TasksTable
-                tasks={tasks}
-                success={success}
-                queryParams={queryParams}
-                hideProjectCols={true}
-                project={project}
-              />
-            </div>
+      ) : (
+        <div className="flex justify-center items-center h-96">
+          <div className="text-center flex justify-center align-middle items-center gap-3">
+            <AiOutlineExclamationCircle className="w-12 h-12 text-red-500" />
+            <h1 className="text-lg font-semibold">
+              Join the project to view tasks
+            </h1>
           </div>
         </div>
-      </div>
+      )}
     </AuthenticatedLayout>
   );
 }

@@ -6,7 +6,10 @@ import {
   TASK_STATUS_CLASS_MAP,
   TASK_STATUS_TEXT_MAP,
 } from "@/constant.jsx";
+
+
 export default function Show({ auth, project, task }) {
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -18,17 +21,11 @@ export default function Show({ auth, project, task }) {
         </div>
       }
     >
+      
       <Head title={`Task "${task.name}"`} />
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-card overflow-hidden shadow-sm sm:rounded-lg">
-            {/* <div>
-              <img
-                src={task.image_path}
-                alt=""
-                className="w-full h-64 object-cover"
-              />
-            </div> */}
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <div className="grid gap-1 grid-cols-2 mt-2">
                 <div>

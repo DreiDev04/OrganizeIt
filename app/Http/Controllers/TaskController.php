@@ -52,13 +52,11 @@ class TaskController extends Controller
      */
     public function create(Project $project)
     {
-        // $projects = Project::query()->orderBy('name', 'asc')->get();
-        $users = User::query()->orderBy('name', 'asc')->get();
+        $users_in_project = $project->users()->orderBy('name', 'asc')->get();
 
         return inertia("Task/Create", [
             'project' => new ProjectResource($project),
-            // 'projects' => ProjectResource::collection($projects),
-            'users' => UserResource::collection($users),
+            'users' => UserResource::collection($users_in_project),
         ]);
     }
 
@@ -83,44 +81,27 @@ class TaskController extends Controller
             ->with('success', 'Task was created');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    // public function show(Task $task)
-    // {
-    //     return inertia('Task/Show', [
-    //         'task' => new TaskResource($task),
-    //     ]);
-    // }
+
 
     public function show(Project $project, Task $task)
     {
-        // if ($task->project_id !== $project->id) {
-        //     abort(404, "Task not found in this project");
-        // }
-
         return inertia('Task/Show', [
             'project' => new ProjectResource($project),
             'task' => new TaskResource($task),
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Project $project, Task $task)
     {
-        $users = User::query()->orderBy('name', 'asc')->get();
+        // $users = User::query()->orderBy('name', 'asc')->get();
+        $users_in_project = $project->users()->orderBy('name', 'asc')->get();
 
         return inertia("Task/Edit", [
             'task' => new TaskResource($task),
             'project' => new ProjectResource($project),
-            'users' => UserResource::collection($users),
+            'users' => UserResource::collection($users_in_project),
         ]);
     }
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateTaskRequest $request, Task $task)
     {
         $data = $request->validated();
@@ -139,16 +120,10 @@ class TaskController extends Controller
             ->with('success', 'Task was edited');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Request $request, Task $task)
     {
         $project_id = $request->get('project_id');
-        // dd($project_id);
-
         $task->delete();
-
         if ($task->image_path) {
             Storage::disk('public')->deleteDirectory(dirname($task->image_path));
         }

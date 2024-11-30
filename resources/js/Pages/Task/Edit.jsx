@@ -25,8 +25,6 @@ export default function Create({ auth, task, project, users }) {
     post(route("task.update", task.id));
   };
 
-  // console.log(data);
-
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -42,10 +40,10 @@ export default function Create({ auth, task, project, users }) {
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+          <div className=" overflow-hidden shadow-sm sm:rounded-lg bg-card">
             <form
               onSubmit={onSubmit}
-              className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
+              className="p-4 sm:p-8 shadow sm:rounded-lg"
             >
               {/* {task.image_path && (
                 <div className="mb-4">
@@ -67,17 +65,7 @@ export default function Create({ auth, task, project, users }) {
 
                 <InputError message={errors.project_id} className="mt-2" />
               </div>
-              {/* <div className="mt-4">
-                <InputLabel htmlFor="task_image_path" value="Task Image" />
-                <TextInput
-                  id="task_image_path"
-                  type="file"
-                  name="image"
-                  className="mt-1 block w-full"
-                  onChange={(e) => setData("image", e.target.files[0])}
-                />
-                <InputError message={errors.image} className="mt-2" />
-              </div> */}
+
               <div className="mt-4">
                 <InputLabel htmlFor="task_name" value="Task Name" />
 

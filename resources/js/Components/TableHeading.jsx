@@ -20,7 +20,7 @@ export default function TableHeading({
             <FaAngleUp
               className={
                 sort_field === name && sort_direction === "asc"
-                  ? "text-red-500"
+                  ? "text-blues"
                   : ""
               }
             />
@@ -28,7 +28,7 @@ export default function TableHeading({
               className={
                 "-mt-1 " +
                 (sort_field === name && sort_direction === "desc"
-                  ? "text-red-500"
+                  ? "text-blues"
                   : "")
               }
             />

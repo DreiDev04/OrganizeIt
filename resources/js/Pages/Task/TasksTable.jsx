@@ -88,7 +88,7 @@ const TasksTable = ({
     router.get(route("task.show", { task: task.id, project: project.id }));
   };
 
-  console.log(tasks);
+  // console.log(tasks);
   return (
     <>
       <div className="mb-5 flex w-full justify-between">

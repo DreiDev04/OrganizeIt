@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TaskResource;
+use App\Http\Resources\UserResource;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
@@ -14,198 +15,198 @@ use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $query = Project::query();
+  /**
+   * Display a listing of the resource.
+   */
+  public function index()
+  {
+    $query = Project::query();
 
-        $sortField = request("sort_field", 'created_at');
-        $sortDirection = request("sort_direction", "desc");
+    $sortField = request("sort_field", 'created_at');
+    $sortDirection = request("sort_direction", "desc");
 
-        if (request("name")) {
-            $query->where("name", "like", "%" . request("name") . "%");
-        }
-        if (request("status")) {
-            $query->where("status", request("status"));
-        }
-
-        $projects = $query->orderBy($sortField, $sortDirection)
-            ->paginate(10)
-            ->onEachSide(1);
-
-        return inertia("Project/Index", [
-            "projects" => ProjectResource::collection($projects),
-            'queryParams' => request()->query() ?: null,
-            'success' => session('success'),
-        ]);
+    if (request("name")) {
+      $query->where("name", "like", "%" . request("name") . "%");
+    }
+    if (request("status")) {
+      $query->where("status", request("status"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return inertia("Project/Create");
+    $projects = $query->orderBy($sortField, $sortDirection)
+      ->paginate(10)
+      ->onEachSide(1);
+
+    return inertia("Project/Index", [
+      "projects" => ProjectResource::collection($projects),
+      'queryParams' => request()->query() ?: null,
+      'success' => session('success'),
+    ]);
+  }
+
+  /**
+   * Show the form for creating a new resource.
+   */
+  public function create()
+  {
+    return inertia("Project/Create");
+  }
+
+  /**
+   * Store a newly created resource in storage.
+   */
+  public function store(StoreProjectRequest $request)
+  {
+    $data = $request->validated();
+    /** @var $image \Illuminate\Http\UploadedFile */
+    $image = $data['image'] ?? null;
+    $data['created_by'] = Auth::id();
+    $data['updated_by'] = Auth::id();
+    $imageFolder = 'project/' . Str::random();
+    $placeholderName = "placeholder-3.png";
+
+    if ($image) {
+      $data['image_path'] = $image->store($imageFolder, 'public');
+    } else {
+      $placeholderPath = public_path("placeholder/{$placeholderName}");
+
+      File::makeDirectory(storage_path("app/public/{$imageFolder}"), 0755, true, true);
+
+      $destinationPath = storage_path("app/public/{$imageFolder}/{$placeholderName}");
+
+      File::copy($placeholderPath, $destinationPath);
+
+      $data['image_path'] = "{$imageFolder}/{$placeholderName}";
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreProjectRequest $request)
-    {
-        $data = $request->validated();
-        /** @var $image \Illuminate\Http\UploadedFile */
-        $image = $data['image'] ?? null;
-        $data['created_by'] = Auth::id();
-        $data['updated_by'] = Auth::id();
-        $imageFolder = 'project/' . Str::random();
-        $placeholderName = "placeholder-3.png";
+    $project = Project::create($data);
 
-        if ($image) {
-            $data['image_path'] = $image->store($imageFolder, 'public');
-        } else {
-            $placeholderPath = public_path("placeholder/{$placeholderName}");
+    $project->users()->attach(auth()->id());
 
-            File::makeDirectory(storage_path("app/public/{$imageFolder}"), 0755, true, true);
+    return to_route('project.index')
+      ->with('success', 'Project was created');
+  }
 
-            $destinationPath = storage_path("app/public/{$imageFolder}/{$placeholderName}");
 
-            File::copy($placeholderPath, $destinationPath);
+  /**
+   * Display the specified resource.
+   */
+  public function show(Project $project)
+  {
+    $isMember = $project->users->contains(auth()->id());
+    $isCreator = $project->created_by === auth()->id();
+    $query = $project->tasks();
 
-            $data['image_path'] = "{$imageFolder}/{$placeholderName}";
-        }
-
-        $project = Project::create($data);
-
-        $project->users()->attach(auth()->id());
-
-        return to_route('project.index')
-            ->with('success', 'Project was created');
+    $sortField = request("sort_field", 'created_at');
+    $sortDirection = request("sort_direction", "desc");
+    if (request("name")) {
+      $query->where("name", "like", "%" . request("name") . "%");
+    }
+    if (request("status")) {
+      $query->where("status", request("status"));
     }
 
+    $tasks = $query->orderBy($sortField, $sortDirection)
+      ->paginate(10)
+      ->onEachSide(1);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Project $project)
-    {
-        // if (!$project->users->contains(auth()->id())) {
-        //     return redirect()->route('dashboard')->with('error', 'You are not a member of this project');
-        // }
+    $users_in_project = $project->users()->orderBy('name', 'asc')->get();
 
-        $isMember = $project->users->contains(auth()->id());
-        $isCreator = $project->created_by === auth()->id();
-        $query = $project->tasks();
+    
 
 
-        $sortField = request("sort_field", 'created_at');
-        $sortDirection = request("sort_direction", "desc");
-        if (request("name")) {
-            $query->where("name", "like", "%" . request("name") . "%");
-        }
-        if (request("status")) {
-            $query->where("status", request("status"));
-        }
+    return inertia('Project/Show', [
+      'project' => new ProjectResource($project),
+      "tasks" => TaskResource::collection($tasks),
+      'queryParams' => request()->query() ?: null,
+      'success' => session('success'),
+      'isMember' => $isMember,
+      'isCreator' => $isCreator,
+      'users_in_project' => UserResource::collection($users_in_project),
+    ]);
+  }
 
-        $tasks = $query->orderBy($sortField, $sortDirection)
-            ->paginate(10)
-            ->onEachSide(1);
-
-
-        return inertia('Project/Show', [
-            'project' => new ProjectResource($project),
-            "tasks" => TaskResource::collection($tasks),
-            'queryParams' => request()->query() ?: null,
-            'success' => session('success'),
-            'isMember' => $isMember,
-            'isCreator' => $isCreator
-        ]);
+  /**
+   * Show the form for editing the specified resource.
+   */
+  public function edit(Project $project)
+  {
+    if (!$project->users->contains(auth()->id())) {
+      return redirect()->route('dashboard')->with('error', 'You are not a member of this project');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Project $project)
-    {
-        if (!$project->users->contains(auth()->id())) {
-            return redirect()->route('dashboard')->with('error', 'You are not a member of this project');
-        }
+    return inertia('Project/Edit', [
+      'project' => new ProjectResource($project),
+    ]);
+  }
 
-        return inertia('Project/Edit', [
-            'project' => new ProjectResource($project),
-        ]);
+  /**
+   * Update the specified resource in storage.
+   */
+  public function update(UpdateProjectRequest $request, Project $project)
+  {
+    $data = $request->validated();
+    $image = $data['image'] ?? null;
+    $data['updated_by'] = Auth::id();
+    if ($image) {
+      if ($project->image_path) {
+        Storage::disk('public')->deleteDirectory(dirname($project->image_path));
+      }
+      $data['image_path'] = $image->store('project/' . Str::random(), 'public');
+    }
+    $project->update($data);
+
+    return to_route('project.index')
+      ->with('success', "Project \"$project->name\" was updated");
+  }
+
+  /**
+   * Remove the specified resource from storage.
+   */
+  public function destroy(Project $project)
+  {
+    if (!$project->users->contains(auth()->id())) {
+      return redirect()->route('dashboard')->with('error', 'You are not a member of this project');
+    }
+    $name = $project->name;
+
+    // Delete tasks associated with the project
+    $project->tasks()->delete();
+
+    // Delete the project
+    $project->delete();
+
+    // Delete the project's image directory if it exists
+    if ($project->image_path) {
+      Storage::disk('public')->deleteDirectory(dirname($project->image_path));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateProjectRequest $request, Project $project)
-    {
-        $data = $request->validated();
-        $image = $data['image'] ?? null;
-        $data['updated_by'] = Auth::id();
-        if ($image) {
-            if ($project->image_path) {
-                Storage::disk('public')->deleteDirectory(dirname($project->image_path));
-            }
-            $data['image_path'] = $image->store('project/' . Str::random(), 'public');
-        }
-        $project->update($data);
+    return to_route('project.index')
+      ->with('success', "Project \"$name\" was deleted along with its tasks");
+  }
 
-        return to_route('project.index')
-            ->with('success', "Project \"$project->name\" was updated");
+  public function join(Project $project)
+  {
+    // Check if the user is already a member
+    if ($project->users->contains(auth()->id())) {
+      return redirect()->route('project.show', $project->id)->with('info', 'You are already a member of this project.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Project $project)
-    {
-        if (!$project->users->contains(auth()->id())) {
-            return redirect()->route('dashboard')->with('error', 'You are not a member of this project');
-        }
-        $name = $project->name;
+    // Add the current user as a member
+    $project->users()->attach(auth()->id());
 
-        // Delete tasks associated with the project
-        $project->tasks()->delete();
+    return redirect()->route('project.show', $project->id)->with('success', 'You have successfully joined the project.');
+  }
 
-        // Delete the project
-        $project->delete();
-
-        // Delete the project's image directory if it exists
-        if ($project->image_path) {
-            Storage::disk('public')->deleteDirectory(dirname($project->image_path));
-        }
-
-        return to_route('project.index')
-            ->with('success', "Project \"$name\" was deleted along with its tasks");
+  public function leave(Project $project)
+  {
+    // Check if the user is a member
+    if (!$project->users->contains(auth()->id())) {
+      return redirect()->route('project.show', $project->id)->with('info', 'You are not a member of this project.');
     }
 
-    public function join(Project $project)
-    {
-        // Check if the user is already a member
-        if ($project->users->contains(auth()->id())) {
-            return redirect()->route('project.show', $project->id)->with('info', 'You are already a member of this project.');
-        }
+    // Remove the current user as a member
+    $project->users()->detach(auth()->id());
 
-        // Add the current user as a member
-        $project->users()->attach(auth()->id());
-
-        return redirect()->route('project.show', $project->id)->with('success', 'You have successfully joined the project.');
-    }
-
-    public function leave(Project $project)
-    {
-        // Check if the user is a member
-        if (!$project->users->contains(auth()->id())) {
-            return redirect()->route('project.show', $project->id)->with('info', 'You are not a member of this project.');
-        }
-
-        // Remove the current user as a member
-        $project->users()->detach(auth()->id());
-
-        return redirect()->route('project.index')->with('success', 'You have successfully left the project.');
-    }
+    return redirect()->route('project.index')->with('success', 'You have successfully left the project.');
+  }
 }
