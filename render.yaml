@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: your-laravel-app
+    env: php
+    buildCommand: |
+      composer install
+      npm install
+      npm run build
+      touch database/database.sqlite
+      chmod 666 database/database.sqlite
+    startCommand: vendor/bin/heroku-php-apache2 public/
+    envVars:
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: DB_CONNECTION
+        value: sqlite
