@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: your-laravel-app
+    name: OrganizeIt
     env: php
     buildCommand: |
       composer install
