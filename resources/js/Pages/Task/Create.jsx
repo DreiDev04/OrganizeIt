@@ -10,7 +10,6 @@ export default function Create({ auth, users, project }) {
 
   const { data, setData, post, errors, reset } = useForm({
     project_id: project.id,
-    // image: "",
     name: "",
     status: "",
     description: "",
@@ -24,7 +23,8 @@ export default function Create({ auth, users, project }) {
     post(route("task.store"));
   };
 
-  // console.log(project);
+  console.log(project);
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -59,17 +59,6 @@ export default function Create({ auth, users, project }) {
 
                 <InputError message={errors.project_id} className="mt-2" />
               </div>
-              {/* <div className="mt-4">
-                <InputLabel htmlFor="task_image_path" value="Task Image" />
-                <TextInput
-                  id="task_image_path"
-                  type="file"
-                  name="image"
-                  className="mt-1 block w-full"
-                  onChange={(e) => setData("image", e.target.files[0])}
-                />
-                <InputError message={errors.image} className="mt-2" />
-              </div> */}
               <div className="mt-4">
                 <InputLabel htmlFor="task_name" value="Task Name" />
 
@@ -179,12 +168,12 @@ export default function Create({ auth, users, project }) {
               </div>
 
               <div className="mt-4 text-right">
-                <Link
+                {/* <Link
                   href={route("project.show", project.id)}
                   className="bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2"
                 >
                   Cancel
-                </Link>
+                </Link> */}
                 <button className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
                   Submit
                 </button>

@@ -70,7 +70,7 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="overflow-hidden bg-card shadow-sm sm:rounded-lg ">
             <div className="p-6 text-gray-900 dark:text-gray-100">
-              <div className="mb-5 flex gap-2">
+              <div className="mb-5 flex flex-col gap-2 sm:flex-row">
                 <TextInput
                   placeholder="Project Name"
                   onBlur={(e) => searchFieldChanged("name", e.target.value)}
@@ -93,14 +93,6 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <thead className="bg-card_dark">
                     <tr>
-                      {/* <TableHeading
-                        name="id"
-                        sort_field={queryParams.sort_field}
-                        sort_direction={queryParams.sort_direction}
-                        sortChanged={sortChanged}
-                      >
-                        ID
-                      </TableHeading> */}
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                         Image
                       </th>
@@ -139,9 +131,6 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                         Created By
                       </th>
-                      {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                        Actions
-                      </th> */}
                     </tr>
                   </thead>
                   <tbody className="bg-background divide-y ">
@@ -152,9 +141,6 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
                           className="hover:bg-card_light cursor-pointer"
                           onClick={() => routeToProject(project)}
                         >
-                          {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                          {project.id}
-                        </td> */}
                           <td className="px-6 py-4 whitespace-nowrap">
                             <img
                               src={project.image_path}
@@ -162,10 +148,8 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
                               className="w-10 h-10 rounded-full object-cover"
                             />
                           </td>
-                          <td className="px-6 py-4  text-sm text-gray-500 dark:text-gray-300 font-bold">
-                            {/* <Link href={route("project.show", project.id)}> */}
+                          <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-300 font-bold">
                             {project.name}
-                            {/* </Link> */}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                             <span
@@ -186,22 +170,6 @@ const Index = ({ auth, projects, queryParams = null, success }) => {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                             {project.createdBy.name}
                           </td>
-                          {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300 text-nowrap">
-                          <Link
-                            href={route("project.edit", project.id)}
-                            className="text-indigo-600 hover:text-indigo-900"
-                          >
-                            Edit
-                          </Link>
-                          <button
-                            // href={route("project.destroy", project.id)}
-                            onClick={(e) => deleteProject(project)}
-                            className="ml-4 text-red-600 hover:text-red-900"
-                          >
-                            Delete
-                          </button>
-                        </td> */}
-                          {/* </Link> */}
                         </tr>
                       ))
                     ) : (

@@ -4,17 +4,17 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function Welcome({ auth }) {
   const { user } = auth;
-  console.log(auth);
+  // console.log(auth);
   return (
     <>
       <Head title="Welcome to OrganizeIt" />
       <div className="min-h-screen bg-background text-foreground flex flex-col">
-        <header className="bg-background shadow-md p-6">
-          <div className="container mx-auto flex justify-between items-center">
+        <header className="bg-background shadow-md md:p-6 py-6 ">
+          <div className="container mx-auto flex justify-between items-center md:text-md">
             <Link href="/dashboard">
               <ApplicationLogo />
             </Link>
-            <nav>
+            <nav className=" flex-end">
               {user ? (
                 <Link
                   href="/dashboard"
@@ -26,13 +26,13 @@ export default function Welcome({ auth }) {
                 <>
                   <Link
                     href="/login"
-                    className="text-lg font-semibold text-foreground hover:text-primary px-4"
+                    className="text-lg font-semibold text-foreground hover:text-primary px-4 "
                   >
                     Login
                   </Link>
                   <Link
                     href="/register"
-                    className="text-lg font-semibold text-foreground hover:text-primary"
+                    className="text-lg font-semibold text-foreground hover:text-primary "
                   >
                     Sign Up
                   </Link>

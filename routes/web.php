@@ -18,12 +18,15 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get("/dashboard", [DashboardController::class, "index"])->name("dashboard");
     Route::resource("project", ProjectController::class);
+
+    Route::get('project/{project}/task/create', [TaskController::class, 'create'])->name('task.create');
+    Route::get('project/{project}/task/{task}', [TaskController::class, 'show'])->name('task.show');
+    Route::get('project/{project}/task/{task}/edit', [TaskController::class, 'edit'])->name('task.edit');
+
     Route::get("/task/my-tasks", [TaskController::class, "myTasks"])->name("task.myTasks");
-    Route::resource("task", TaskController::class); // Resource route already includes the 'create' route
-
-    // Route::get('project/{project}/task/{task}', [TaskController::class, 'show'])->name('task.show');
-    // Route::get('project/{project}/task/{task}/edit', [TaskController::class, 'edit'])->name('task.edit'`);
-
+    
+    Route::resource("task", TaskController::class)->except(['create', 'show', 'edit']);
+    Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('project.show');
     Route::get('project/{project}/join', [ProjectController::class, 'join'])->name('project.join');
     Route::post('project/{project}/leave', [ProjectController::class, 'leave'])->name('project.leave');
     Route::resource("user", UserController::class);

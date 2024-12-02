@@ -28,7 +28,6 @@ const TasksTable = ({
     } else {
       delete updatedParams[name];
     }
-    // router.get(route("project.show", updatedParams));
     const scrollPosition = window.scrollY;
     router.get(
       route("project.show", { ...updatedParams, project: project.id }),
@@ -82,17 +81,17 @@ const TasksTable = ({
 
   const editTask = (task) => {
     router.get(route("task.edit", { project: project.id, task: task.id }));
-  }
+  };
 
   const routeToTask = (task) => {
     router.get(route("task.show", { task: task.id, project: project.id }));
   };
 
-  // console.log(tasks);
+  console.log(project.id);
   return (
     <>
-      <div className="mb-5 flex w-full justify-between">
-        <div className="flex gap-2">
+      <div className="mb-5 flex w-full justify-between flex-wrap gap-2">
+        <div className="flex gap-2 flex-wrap">
           <TextInput
             placeholder="Task Name"
             onBlur={(e) => searchFieldChanged("name", e.target.value)}
@@ -111,7 +110,7 @@ const TasksTable = ({
             <option value="completed">Completed</option>
           </SelectInput>
         </div>
-        <div className="flex gap-2">
+        <div className="flex justify-end">
           <Button
             variant="default"
             onClick={() => {
@@ -122,7 +121,7 @@ const TasksTable = ({
           </Button>
         </div>
       </div>
-      <div className="">
+      <div className="overflow-x-auto">
         <table className="min-w-full divide-y">
           <thead className="bg-card_dark">
             <tr>
@@ -174,7 +173,7 @@ const TasksTable = ({
               </th>
             </tr>
           </thead>
-          <tbody className=" divide-y divide-gray-3 bg-background">
+          <tbody className="divide-y divide-gray-3 bg-background">
             {tasks.data.length ? (
               tasks.data.map((task) => (
                 <tr
@@ -183,11 +182,11 @@ const TasksTable = ({
                   onClick={() => routeToTask(task)}
                 >
                   {!hideProjectCols && (
-                    <td className="px-6 py-4  text-sm text-foreground ">
+                    <td className="px-6 py-4 text-sm text-foreground">
                       {task.project.name}
                     </td>
                   )}
-                  <td className="px-6 py-4  text-sm text-foregroundhover:underline font-bold ">
+                  <td className="px-6 py-4 text-sm text-foreground hover:underline font-bold">
                     {task.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
@@ -219,13 +218,12 @@ const TasksTable = ({
                       {TASK_PRIORITY_TEXT_MAP[task.priority]}
                     </span>
                   </td>
-                  <td className=" py-4 whitespace-nowrap text-sm text-foreground">
+                  <td className="py-4 whitespace-nowrap text-sm text-foreground">
                     <Button
                       onClick={(e) => {
                         e.stopPropagation();
                         editTask(task);
                       }}
-                      
                     >
                       Edit
                     </Button>

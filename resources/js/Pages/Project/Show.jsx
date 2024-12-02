@@ -42,9 +42,9 @@ export default function Show({
     router.post(route("project.leave", project.id));
   };
 
-  console.log("Project: ", project);
-  console.log("Tasks: ", tasks);
-  console.log("Users in Project: ", users_in_project);
+  // console.log("Project: ", project);
+  // console.log("Tasks: ", tasks);
+  // console.log("Users in Project: ", users_in_project);
 
   const totalTasks = tasks.data.length;
   const completedTasks = tasks.data.filter(
@@ -59,7 +59,7 @@ export default function Show({
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className="flex justify-between">
+        <div className="flex flex-col md:flex-row justify-between">
           <div className="flex flex-col gap-4">
             <h1 className="text-2xl font-bold flex items-center gap-2">
               {project.name}
@@ -84,11 +84,11 @@ export default function Show({
               </div>
             </div>
           </div>
-          <div className="flex justify-center items-center gap-2">
+          <div className="flex justify-center items-center gap-2 mt-4 md:mt-0">
             {!isMember ? (
               <Link
                 href={route("project.join", project.id)}
-                className="bg-primary py-1 px-3  rounded shadow transition-all hover:bg-blue-700"
+                className="bg-primary py-1 px-3 rounded shadow transition-all hover:bg-blue-700"
               >
                 Join Project
               </Link>
@@ -121,9 +121,9 @@ export default function Show({
       }
     >
       <Head title={project.name} />
-      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-10">
-        <div className="grid grid-cols-4 min-h-28 gap-10 mt-10">
-          <div className="border-2 rounded-lg container flex items-center justify-between">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-10 container">
+        <div className="grid md:grid-cols-4 grid-cols-1 min-h-28 gap-10 mt-10">
+          <div className="border-2 rounded-lg container flex items-center justify-between p-4">
             <div>
               <h1 className="text-md font-bold text-gray-400">Total Task</h1>
               <p className="text-2xl font-bold">{totalTasks || 0}</p>
@@ -132,7 +132,7 @@ export default function Show({
               <FaTasks className="w-12 h-12 text-white" />
             </div>
           </div>
-          <div className="border-2 rounded-lg container flex items-center justify-between">
+          <div className="border-2 rounded-lg container flex items-center justify-between p-4">
             <div className="">
               <h1 className="text-md font-bold text-gray-400">Completed </h1>
               <p className="text-2xl font-bold text-green">
@@ -143,7 +143,7 @@ export default function Show({
               <FaRegCheckCircle className="w-12 h-12 text-green" />
             </div>
           </div>
-          <div className="border-2 rounded-lg container flex items-center justify-between">
+          <div className="border-2 rounded-lg container flex items-center justify-between p-4">
             <div className="">
               <h1 className="text-md font-bold text-gray-400">Pending</h1>
               <p className="text-2xl font-bold text-amber">
@@ -154,7 +154,7 @@ export default function Show({
               <FaRegClock className="w-12 h-12 text-amber" />
             </div>
           </div>
-          <div className="border-2 rounded-lg container flex items-center justify-between">
+          <div className="border-2 rounded-lg container flex items-center justify-between p-4">
             <div className="">
               <h1 className="text-md font-bold text-gray-400">In Progress</h1>
               <p className="text-2xl font-bold text-blues">
@@ -166,8 +166,8 @@ export default function Show({
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-3 min-h-80 gap-8">
-          <div className="col-span-2 border rounded-lg p-4 gap-5 flex flex-col  ">
+        <div className="grid md:grid-cols-3 grid-cols-1 min-h-80 gap-8">
+          <div className="md:col-span-2 col-span-1 border rounded-lg p-4 gap-5 flex flex-col">
             <div>
               <h3 className="text-lg font-semibold mb-4 flex gap-2 items-center">
                 <span>
@@ -179,29 +179,10 @@ export default function Show({
                 {project.description || "No description available"}
               </p>
             </div>
-            <div>
-              {/* <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
-              <ul className="space-y-4 text-sm">
-                <li className="flex items-center gap-2">
-                  <span className="h-2 w-2 bg-blue-500 rounded-full"></span>
-                  Task: "Update documentation" marked as complete{" "}
-                  <span className="ml-auto text-gray-400">2h ago</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="h-2 w-2 bg-blue-500 rounded-full"></span>
-                  Task: "Update documentation" marked as complete{" "}
-                  <span className="ml-auto text-gray-400">2h ago</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="h-2 w-2 bg-blue-500 rounded-full"></span>
-                  Task: "Update documentation" marked as complete{" "}
-                  <span className="ml-auto text-gray-400">2h ago</span>
-                </li>
-              </ul> */}
-            </div>
+            <div></div>
           </div>
 
-          <div className="col-span-1 border rounded-lg p-4  shadow-sm">
+          <div className="md:col-span-1 col-span-1 border rounded-lg p-4 shadow-sm">
             <h1 className="text-lg font-semibold mb-4">Members:</h1>
             {users_in_project.data.map((user) => (
               <div className="space-y-4" key={user.id}>

@@ -53,6 +53,8 @@ class TaskController extends Controller
     public function create(Project $project)
     {
         $users_in_project = $project->users()->orderBy('name', 'asc')->get();
+        // $project_id = $project->id;
+        // dd($project_id);
 
         return inertia("Task/Create", [
             'project' => new ProjectResource($project),
