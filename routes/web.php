@@ -26,7 +26,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get("/task/my-tasks", [TaskController::class, "myTasks"])->name("task.myTasks");
     
     Route::resource("task", TaskController::class)->except(['create', 'show', 'edit']);
-    Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('project.show');
+
+    // Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('project.show');
     Route::get('project/{project}/join', [ProjectController::class, 'join'])->name('project.join');
     Route::post('project/{project}/leave', [ProjectController::class, 'leave'])->name('project.leave');
     Route::resource("user", UserController::class);
