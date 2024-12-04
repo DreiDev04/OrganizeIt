@@ -205,10 +205,10 @@ const TasksTable = ({
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                     {task.due_date}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground ">
                     {task.createdBy.name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground ">
                     {task.assignedUser.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground justify-center align-middle">

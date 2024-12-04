@@ -168,12 +168,12 @@ export default function Create({ auth, users, project }) {
               </div>
 
               <div className="mt-4 text-right">
-                {/* <Link
+                <Link
                   href={route("project.show", project.id)}
                   className="bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2"
                 >
                   Cancel
-                </Link> */}
+                </Link>
                 <button className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
                   Submit
                 </button>

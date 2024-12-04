@@ -1,6 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constant";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 
 export default function Dashboard({
   auth,
@@ -12,6 +12,10 @@ export default function Dashboard({
   myCompletedTasks,
   activeTasks,
 }) {
+  // const routeToTask = (task) => {
+  //   router.get(route("task.show", { task: task.id, project: project.id }));
+  // };
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -70,9 +74,9 @@ export default function Dashboard({
                 <table className="mt-3 w-full text-sm text-left rtl:text-right text-foreground">
                   <thead className="text-xs uppercase order-b-2 bg-card_light">
                     <tr>
-                      <th className="px-3 py-3">ID</th>
+                      {/* <th className="px-3 py-3">ID</th> */}
                       <th className="px-3 py-3">Project Name</th>
-                      <th className="px-3 py-3">Name</th>
+                      <th className="px-3 py-3">Task Name</th>
                       <th className="px-3 py-3">Status</th>
                       <th className="px-3 py-3">Due Date</th>
                     </tr>
@@ -80,16 +84,18 @@ export default function Dashboard({
                   <tbody>
                     {activeTasks.data.map((task) => (
                       <tr key={task.id}>
-                        <td className="px-3 py-2">{task.id}</td>
+                        {/* <td className="px-3 py-2">{task.id}</td> */}
                         <td className="px-3 py-2 text-white hover:underline">
                           <Link href={route("project.show", task.project.id)}>
                             {task.project.name}
                           </Link>
                         </td>
-                        <td className="px-3 py-2 text-white hover:underline">
-                          {/* <Link href={route("task.show", task.id)}>
+                        <td className="px-3 py-2 text-white ">
+                          {task.name}
+
+                          {/* <button onClick={() => routeToTask(task)}>
                             {task.name}
-                          </Link> */}
+                          </button> */}
                         </td>
                         <td className="px-3 py-2">
                           <span
@@ -101,7 +107,9 @@ export default function Dashboard({
                             {TASK_STATUS_TEXT_MAP[task.status]}
                           </span>
                         </td>
-                        <td className="px-3 py-2 text-nowrap">{task.due_date}</td>
+                        <td className="px-3 py-2 text-nowrap">
+                          {task.due_date}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

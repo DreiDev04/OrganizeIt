@@ -61,7 +61,7 @@ class ProjectController extends Controller
     $image = $data['image'] ?? null;
     $data['created_by'] = Auth::id();
     $data['updated_by'] = Auth::id();
-    $imageFolder = 'project/' . Str::random();
+    $imageFolder = 'project/' . Str::random(40);
     $placeholderName = "placeholder-3.png";
 
     if ($image) {
