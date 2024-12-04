@@ -5,6 +5,7 @@ export default function TableHeading({
   sortable = true,
   sort_field = null,
   sort_direction = null,
+  
   sortChanged = () => {},
   children,
 }) {

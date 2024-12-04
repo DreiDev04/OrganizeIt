@@ -186,7 +186,10 @@ const TasksTable = ({
                       {task.project.name}
                     </td>
                   )}
-                  <td className="px-6 py-4 text-sm text-foreground hover:underline font-bold">
+                  <td
+                    className="px-6 py-4 text-sm text-foreground hover:underline font-bold line-clamp-1 max-w-60"
+                    
+                  >
                     {task.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">

@@ -62,7 +62,7 @@ export default function Show({
         <div className="flex flex-col md:flex-row justify-between">
           <div className="flex flex-col gap-4">
             <h1 className="text-2xl font-bold flex items-center gap-2">
-              {project.name}
+              <span className="line-clamp-2 w-1/2">{project.name}</span>
               <span
                 className={`${PROJECT_STATUS_CLASS_MAP[project.status]} 
                   rounded-full text-sm px-3 py-1`}

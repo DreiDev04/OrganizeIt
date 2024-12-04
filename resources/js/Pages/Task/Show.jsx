@@ -7,22 +7,22 @@ import {
   TASK_STATUS_TEXT_MAP,
 } from "@/constant.jsx";
 
-
 export default function Show({ auth, project, task }) {
-
   return (
     <AuthenticatedLayout
       user={auth.user}
       header={
         <div className="flex items-center justify-between">
           <h2 className="font-semibold text-xl text-foreground leading-tight">
-            {`Task ${task.name}`}
+            <span className="line-clamp-2 w-1/2">{`Task ${task.name}`}</span>
           </h2>
+          <Link href={route("project.show", project.id)} className="bg-blues px-2 py-1 rounded-lg">
+            Back
+          </Link>
         </div>
       }
     >
-      
-      <Head title={`Task "${task.name}"`} />
+      <Head title={`Task: "${task.name}"`} />
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-card overflow-hidden shadow-sm sm:rounded-lg">
