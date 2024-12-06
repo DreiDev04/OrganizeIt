@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -10,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Log;
+
 
 class ProfileController extends Controller
 {
@@ -45,20 +49,47 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
+        try {
+            $request->validate([
+                'password' => ['required', 'current_password'],
+            ]);
 
-        $user = $request->user();
+            $user = $request->user();
 
+            if (!$user) {
+                throw new \Exception("Authenticated user not found.");
+            }
 
-        Auth::logout();
+            // Delete related tasks where the user is the assigned user or creator
+            Task::where('assigned_user_id', $user->id)->delete();
+            Task::where('created_by', $user->id)->delete();
+            Task::where('updated_by', $user->id)->delete();
 
-        $user->delete();
+            // Remove user from projects (pivot table entries)
+            $user->projects()->detach();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+            // Delete projects created by the user
+            Project::where('created_by', $user->id)->delete();
 
-        return Redirect::to('/');
+            // Log out the user
+            Auth::logout();
+
+            // Delete the user
+            $user->delete();
+
+            // Invalidate session
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return Redirect::to('/');
+        } catch (\Throwable $e) {
+            Log::error("Error deleting user: " . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return Redirect::back()->withErrors([
+                'error' => 'An error occurred while deleting your account. Please try again later.',
+            ]);
+        }
     }
 }
